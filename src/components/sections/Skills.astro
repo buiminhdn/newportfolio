@@ -1,0 +1,385 @@
+---
+import SectionTitle from '../SectionTitle.astro';
+
+const androidStack = [
+	{ name: 'Kotlin', detail: 'Production-first language for reliable Android systems' },
+	{ name: 'Jetpack Compose', detail: 'Modern UI built with reusable, state-driven components' },
+	{ name: 'Clean Architecture', detail: 'Readable boundaries between UI, domain and data layers' },
+	{ name: 'MVVM / MVI', detail: 'Predictable state, testable flows and scalable screen logic' },
+	{ name: 'Firebase', detail: 'Auth, analytics, storage and real-time product infrastructure' },
+	{ name: 'Room', detail: 'Local-first persistence with structured offline behavior' },
+	{ name: 'Koin', detail: 'Lightweight dependency injection for modular features' },
+];
+
+const androidMetrics = [
+	{ value: 4, suffix: '+', label: 'Years of experience' },
+	{ value: 10, suffix: '+', label: 'Apps shipped' },
+	{ value: 100, suffix: 'K+', label: 'Users reached' },
+	{ value: 20, suffix: '+', label: 'Production projects' },
+];
+
+const supportCards = [
+	{
+		title: 'UI/UX Design',
+		kicker: 'Product clarity',
+		body: 'Turns rough ideas into interfaces people can understand, scan and use without friction.',
+		tools: 'Figma · Design systems · Prototypes',
+	},
+	{
+		title: 'Web Development',
+		kicker: 'Launch-ready systems',
+		body: 'Builds fast portfolio, product and business websites with clean front-end architecture.',
+		tools: 'Astro · React · TypeScript · Firebase',
+	},
+	{
+		title: 'Marketing',
+		kicker: 'Demand + content',
+		body: 'Shapes landing pages, campaigns and visual assets around conversion instead of decoration.',
+		tools: 'Brand design · Social content · SEO',
+	},
+	{
+		title: 'Business',
+		kicker: 'End-to-end thinking',
+		body: 'Connects product decisions to users, operations and revenue so shipped work has a reason.',
+		tools: 'E-commerce · Client work · Strategy',
+	},
+];
+---
+
+<section class="section container skills-showcase" id="skills" aria-labelledby="skills-title" data-parallax-root>
+	<SectionTitle id="skills-title" eyebrow="what i build best">Skills</SectionTitle>
+
+	<div class="skills-bento">
+		<article class="android-card reveal">
+			<div class="android-copy">
+				<p class="eyebrow">Primary expertise</p>
+				<h3>Android Engineering</h3>
+				<p class="android-lead">
+					Production Android apps with polished interfaces, resilient architecture and product
+					thinking from first screen to release.
+				</p>
+			</div>
+
+			<dl class="impact-grid" aria-label="Android impact metrics">
+				{
+					androidMetrics.map((metric, i) => (
+						<div class="impact" style={`--i:${i}`}>
+							<dd>
+								<span class="count" data-count={metric.value} data-suffix={metric.suffix}>0</span>
+							</dd>
+							<dt>{metric.label}</dt>
+						</div>
+					))
+				}
+			</dl>
+
+			<div class="stack-panel">
+				<p class="stack-title">Core build system</p>
+				<ul class="stack-list" aria-label="Android engineering stack">
+					{
+						androidStack.map((item) => (
+							<li>
+								<strong>{item.name}</strong>
+								<span>{item.detail}</span>
+							</li>
+						))
+					}
+				</ul>
+			</div>
+		</article>
+
+		<div class="support-grid">
+			{
+				supportCards.map((card, i) => (
+					<article class="support-card reveal" style={`--i:${i + 1}`}>
+						<p class="support-kicker">{card.kicker}</p>
+						<h3>{card.title}</h3>
+						<p>{card.body}</p>
+						<span>{card.tools}</span>
+					</article>
+				))
+			}
+		</div>
+	</div>
+</section>
+
+<style>
+	.skills-showcase {
+		position: relative;
+	}
+	.skills-bento {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--space-6);
+	}
+	.android-card,
+	.support-card {
+		position: relative;
+		overflow: hidden;
+		border: 1px solid var(--color-border-line);
+		border-radius: 8px;
+		background:
+			linear-gradient(135deg, rgba(209, 235, 119, 0.12), transparent 34%),
+			linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.01)),
+			var(--color-surface);
+		transition:
+			transform var(--dur-fast) var(--ease-out),
+			border-color var(--dur-fast) var(--ease-out),
+			box-shadow var(--dur-fast) var(--ease-out);
+	}
+	.android-card:hover,
+	.support-card:hover {
+		transform: translateY(-6px);
+		border-color: color-mix(in srgb, var(--color-primary) 72%, var(--color-border-line));
+		box-shadow: var(--glow-primary), 0 28px 80px rgba(0, 0, 0, 0.48);
+	}
+	.android-card {
+		min-height: 44rem;
+		padding: clamp(var(--space-8), 5vw, var(--space-16));
+		display: grid;
+		grid-template-rows: auto auto 1fr;
+		gap: var(--space-10);
+		border-color: color-mix(in srgb, var(--color-primary) 72%, var(--color-border-line));
+		isolation: isolate;
+	}
+	.android-card::before {
+		content: '';
+		position: absolute;
+		inset: 1px;
+		z-index: -1;
+		background-image:
+			linear-gradient(rgba(209, 235, 119, 0.08) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(209, 235, 119, 0.08) 1px, transparent 1px);
+		background-size: 42px 42px;
+		background-position: 0 0;
+		mask-image: radial-gradient(circle at 72% 16%, #000 0 24%, transparent 58%);
+		opacity: 0.8;
+		animation: skillGridDrift 18s linear infinite;
+	}
+	.android-copy {
+		max-width: 46rem;
+	}
+	.android-copy .eyebrow {
+		margin: 0 0 var(--space-5);
+	}
+	.android-copy h3 {
+		margin: 0;
+		font-family: var(--font-display);
+		font-size: clamp(4rem, 9vw, 8rem);
+		line-height: 0.9;
+		text-transform: uppercase;
+		letter-spacing: 0;
+	}
+	.android-lead {
+		max-width: 38rem;
+		margin: var(--space-6) 0 0;
+		color: var(--color-text-subtle);
+		font-size: clamp(1rem, 1.4vw, 1.25rem);
+		font-weight: var(--fw-light);
+		line-height: 1.55;
+	}
+	.impact-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: var(--space-3);
+		margin: 0;
+	}
+	.impact {
+		border-top: 1px solid var(--color-border-line);
+		padding-top: var(--space-4);
+	}
+	.impact dd,
+	.impact dt {
+		margin: 0;
+	}
+	.impact dd {
+		font-family: var(--font-display);
+		font-size: clamp(2.6rem, 5vw, 4.8rem);
+		line-height: 0.9;
+		color: var(--color-text);
+	}
+	.impact dt {
+		margin-top: var(--space-2);
+		max-width: 8.5rem;
+		font-family: var(--font-mono);
+		font-size: var(--fs-xs);
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		color: var(--color-text-muted);
+	}
+	.count::after {
+		content: attr(data-suffix);
+		color: var(--color-primary);
+	}
+	.stack-panel {
+		align-self: end;
+		border-top: 1px solid color-mix(in srgb, var(--color-primary) 34%, var(--color-border-line));
+		padding-top: var(--space-6);
+	}
+	.stack-title {
+		margin: 0 0 var(--space-5);
+		font-family: var(--font-mono);
+		font-size: var(--fs-xs);
+		text-transform: uppercase;
+		letter-spacing: 0.14em;
+		color: var(--color-primary);
+	}
+	.stack-list {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--space-4);
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	.stack-list li {
+		display: grid;
+		gap: var(--space-1);
+		padding-bottom: var(--space-4);
+		border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+	}
+	.stack-list li:last-child {
+		padding-bottom: 0;
+		border-bottom: 0;
+	}
+	.stack-list strong {
+		font-size: var(--fs-base);
+		color: var(--color-text);
+	}
+	.stack-list span {
+		color: var(--color-text-muted);
+		font-size: var(--fs-sm);
+		line-height: 1.55;
+	}
+	.support-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--space-6);
+	}
+	.support-card {
+		min-height: 15rem;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		padding: var(--space-6);
+	}
+	.support-card:nth-child(2) {
+		min-height: 18rem;
+	}
+	.support-card:nth-child(3) {
+		min-height: 13rem;
+	}
+	.support-kicker {
+		margin: 0;
+		font-family: var(--font-mono);
+		font-size: var(--fs-xs);
+		text-transform: uppercase;
+		letter-spacing: 0.14em;
+		color: var(--color-primary);
+	}
+	.support-card h3 {
+		margin: var(--space-5) 0 var(--space-3);
+		font-family: var(--font-display);
+		font-size: clamp(2rem, 3vw, 3.2rem);
+		line-height: 0.95;
+		text-transform: uppercase;
+		letter-spacing: 0;
+	}
+	.support-card p:not(.support-kicker) {
+		margin: 0;
+		color: var(--color-text-muted);
+		font-size: var(--fs-sm);
+		line-height: 1.6;
+	}
+	.support-card span {
+		display: block;
+		margin-top: var(--space-6);
+		padding-top: var(--space-4);
+		border-top: 1px solid var(--color-border-line);
+		font-family: var(--font-mono);
+		font-size: var(--fs-xs);
+		color: var(--color-text-subtle);
+	}
+	@media (min-width: 760px) {
+		.impact-grid {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+		}
+		.stack-list {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+		.support-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+	@media (min-width: 1180px) {
+		.skills-bento {
+			grid-template-columns: minmax(0, 1.85fr) minmax(20rem, 0.95fr);
+			align-items: stretch;
+		}
+		.android-card {
+			min-height: 50rem;
+		}
+		.support-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.android-card:hover,
+		.support-card:hover {
+			transform: none;
+		}
+		.android-card::before {
+			animation: none;
+		}
+	}
+	@keyframes skillGridDrift {
+		from {
+			background-position: 0 0;
+		}
+		to {
+			background-position: 84px 42px;
+		}
+	}
+</style>
+
+<script>
+	const section = document.querySelector<HTMLElement>('.skills-showcase');
+	const counters = section?.querySelectorAll<HTMLElement>('[data-count]');
+
+	if (section && counters?.length) {
+		const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+		const formatCounter = (el: HTMLElement, value: number) => {
+			el.textContent = String(value);
+		};
+
+		const animateCounters = () => {
+			counters.forEach((el) => {
+				const target = Number(el.dataset.count) || 0;
+				if (reduce) {
+					formatCounter(el, target);
+					return;
+				}
+
+				const duration = 1100;
+				const start = performance.now();
+				const tick = (now: number) => {
+					const progress = Math.min(1, (now - start) / duration);
+					const eased = 1 - Math.pow(1 - progress, 3);
+					formatCounter(el, Math.round(target * eased));
+					if (progress < 1) requestAnimationFrame(tick);
+				};
+				requestAnimationFrame(tick);
+			});
+		};
+
+		const io = new IntersectionObserver(
+			(entries, observer) => {
+				if (!entries.some((entry) => entry.isIntersecting)) return;
+				animateCounters();
+				observer.disconnect();
+			},
+			{ threshold: 0.35 },
+		);
+		io.observe(section);
+	}
+</script>

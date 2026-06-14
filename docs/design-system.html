@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design System — Bui Quang Minh</title>
+  <!-- Font: preconnect + chỉ weight đang dùng + display=swap (tránh render-blocking) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@200;300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="design-system.css" />
+  <style>
+    /* chỉ phục vụ trang demo này */
+    .demo-section { margin-top: var(--space-24); }
+    .demo-label { font-size: var(--fs-sm); color: var(--color-text-muted); margin-bottom: var(--space-4); text-transform: uppercase; letter-spacing: 0.05em; }
+    .row { display: flex; flex-wrap: wrap; gap: var(--space-4); align-items: center; }
+    .swatch { width: 5rem; height: 5rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-line); }
+    .swatch-wrap { text-align: center; font-size: var(--fs-xs); color: var(--color-text-muted); }
+  </style>
+</head>
+<body>
+  <main class="container" style="padding-top: var(--space-16); padding-bottom: var(--space-32);">
+
+    <h1 class="text-hero">Design System</h1>
+    <p class="lead text-muted" style="margin-top: var(--space-4);">
+      Token &amp; component cho HTML/CSS thuần — trích từ portfolio.
+    </p>
+
+    <!-- COLORS -->
+    <section class="demo-section">
+      <p class="demo-label">Colors</p>
+      <div class="row">
+        <div class="swatch-wrap"><div class="swatch" style="background:var(--color-primary)"></div>primary</div>
+        <div class="swatch-wrap"><div class="swatch" style="background:var(--color-secondary)"></div>secondary</div>
+        <div class="swatch-wrap"><div class="swatch" style="background:var(--color-bg)"></div>bg</div>
+        <div class="swatch-wrap"><div class="swatch" style="background:var(--color-surface)"></div>surface</div>
+        <div class="swatch-wrap"><div class="swatch" style="background:var(--color-text-muted)"></div>muted</div>
+        <div class="swatch-wrap"><div class="swatch" style="background:var(--color-border)"></div>border</div>
+      </div>
+    </section>
+
+    <!-- TYPOGRAPHY -->
+    <section class="demo-section">
+      <p class="demo-label">Typography</p>
+      <p class="text-section">Section Title</p>
+      <p class="text-h2">Sub heading</p>
+      <p class="text-h3">Item name</p>
+      <p class="lead">Lead paragraph — Poppins extralight.</p>
+      <p class="fw-extralight text-muted">Body muted — mô tả phụ với gray-300.</p>
+    </section>
+
+    <!-- BUTTONS -->
+    <section class="demo-section">
+      <p class="demo-label">Buttons</p>
+      <div class="row">
+        <a href="#" class="btn-primary">CONTACT ME</a>
+        <button class="btn-outline">Play Music</button>
+        <a href="#" class="link">SEE ON GITHUB</a>
+      </div>
+    </section>
+
+    <!-- CHIPS / PILLS -->
+    <section class="demo-section">
+      <p class="demo-label">Chips &amp; Pills</p>
+      <div class="row" style="margin-bottom: var(--space-5);">
+        <span class="chip">Next.js</span>
+        <span class="chip">Tailwind CSS</span>
+        <span class="chip">PostgreSQL</span>
+      </div>
+      <div class="row" style="margin-bottom: var(--space-5);">
+        <span class="pill">React</span>
+        <span class="pill">.NET Core</span>
+      </div>
+      <div class="row">
+        <span class="pill-contact">email@example.com</span>
+        <span class="pill-contact">0798851709</span>
+      </div>
+    </section>
+
+    <!-- CARD -->
+    <section class="demo-section">
+      <p class="demo-label">Project Card</p>
+      <div class="grid-2">
+        <div class="card">
+          <span class="badge">Featured Project</span>
+          <img src="https://picsum.photos/600/400" alt="" />
+        </div>
+        <div>
+          <p class="text-h3">Project Name</p>
+          <p class="fw-extralight text-muted" style="margin-top: var(--space-4);">
+            Mô tả ngắn về dự án, viết với font extralight và màu muted.
+          </p>
+          <div class="info-row" style="margin-top: var(--space-8);">
+            <span class="label">Tech Stack</span>
+            <span class="values">
+              <span class="chip">Next.js</span><span class="chip">Supabase</span>
+            </span>
+          </div>
+          <div class="info-row">
+            <span class="label">Key Highlight</span>
+            <span class="values"><span class="chip">Realtime Chat</span></span>
+          </div>
+          <div class="row" style="margin-top: var(--space-6);">
+            <a href="#" class="link">LIVE DEMO</a>
+            <a href="#" class="link">SEE ON GITHUB</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- MOTION -->
+    <section class="demo-section">
+      <p class="demo-label">Reveal on scroll (.reveal + JS)</p>
+      <div class="grid-cards grid-cards-3">
+        <img class="media media-sm reveal" style="--i:0" src="https://picsum.photos/400/300?1" alt="" />
+        <img class="media media-sm reveal" style="--i:1" src="https://picsum.photos/400/300?2" alt="" />
+        <img class="media media-sm reveal" style="--i:2" src="https://picsum.photos/400/300?3" alt="" />
+      </div>
+    </section>
+
+    <a href="#" class="btn-float">Back to top</a>
+  </main>
+
+  <!-- Reveal-on-scroll: thêm .is-visible khi phần tử vào viewport -->
+  <script>
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); } });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+  </script>
+</body>
+</html>

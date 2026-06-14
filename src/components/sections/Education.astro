@@ -1,0 +1,35 @@
+---
+import SectionTitle from '../SectionTitle.astro';
+---
+
+<section class="section container" id="education" aria-labelledby="edu-title">
+	<div class="split">
+		<SectionTitle id="edu-title" eyebrow="education">Education</SectionTitle>
+
+		<div class="edu-body reveal">
+			<h3 class="text-h3">University of Greenwich — Da Nang Campus</h3>
+			<p class="text-primary period">Bachelor of Computing · 05/2021 — 09/2025</p>
+			<p class="text-muted fw-extralight">
+				Valedictorian of the Information Technology program. Strong foundation in
+				software engineering, web & mobile development, databases, system analysis
+				and product development.
+			</p>
+		</div>
+	</div>
+</section>
+
+<style>
+	.edu-body {
+		max-width: 42rem;
+	}
+	.edu-body h3 {
+		margin: 0;
+	}
+	.period {
+		margin: var(--space-2) 0 var(--space-4);
+		font-size: var(--fs-sm);
+	}
+	.edu-body p:last-child {
+		margin: 0;
+	}
+</style>

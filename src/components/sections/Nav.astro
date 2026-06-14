@@ -1,0 +1,67 @@
+---
+const links = [
+	{ label: 'About', href: '#about' },
+	{ label: 'Skills', href: '#skills' },
+	{ label: 'Featured', href: '#featured' },
+	{ label: 'Work', href: '#projects' },
+	{ label: 'Experience', href: '#experience' },
+	{ label: 'Contact', href: '#contact' },
+];
+---
+
+<header class="nav">
+	<div class="container nav-inner">
+		<a href="#top" class="brand display">BQM</a>
+		<nav aria-label="Primary">
+			<ul>
+				{links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+			</ul>
+		</nav>
+		<a href="#contact" class="btn-outline nav-cta">Contact</a>
+	</div>
+</header>
+
+<style>
+	.nav {
+		position: sticky;
+		top: 0;
+		z-index: 40;
+		background: color-mix(in srgb, var(--color-bg) 85%, transparent);
+		backdrop-filter: blur(8px);
+		border-bottom: 1px solid var(--color-border-line);
+	}
+	.nav-inner {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-6);
+		min-height: 4rem;
+	}
+	.brand {
+		font-size: var(--fs-h3);
+		letter-spacing: 0.05em;
+	}
+	nav ul {
+		display: none;
+		gap: var(--space-6);
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	nav a {
+		font-size: var(--fs-sm);
+		color: var(--color-text-muted);
+		transition: color var(--dur-fast);
+	}
+	nav a:hover {
+		color: var(--color-text);
+	}
+	.nav-cta {
+		font-size: var(--fs-sm);
+	}
+	@media (min-width: 768px) {
+		nav ul {
+			display: flex;
+		}
+	}
+</style>

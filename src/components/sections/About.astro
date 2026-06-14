@@ -1,0 +1,464 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import SectionTitle from '../SectionTitle.astro';
+
+/**
+ * Career Journey — full-width storytelling timeline (replaces old About).
+ * One centered spine that grows on scroll; each milestone fills the viewport
+ * width with image on the left and content on the right.
+ *
+ * Visuals dominate (~48% width each side). Text is deliberately minimal:
+ * title · company · period · one key achievement · impact metrics.
+ *
+ * Ảnh: thả vào src/assets/about/<key>.{jpg,png,webp...} (xem README ở đó).
+ * Số liệu "—" là slot TODO — điền số THẬT, không bịa.
+ */
+const aboutImgs = import.meta.glob<{ default: ImageMetadata }>(
+	'../../assets/about/*.{jpg,jpeg,png,webp,avif}',
+	{ eager: true },
+);
+const imgByKey: Record<string, ImageMetadata> = {};
+for (const [path, mod] of Object.entries(aboutImgs)) {
+	const base = path.split('/').pop()!.replace(/\.[^.]+$/, ''); // "android-1"
+	const key = base.replace(/-\d+$/, ''); // "android"
+	if (!imgByKey[key]) imgByKey[key] = mod.default; // first by name wins
+}
+
+type Milestone = {
+	key: string;
+	year: string;
+	title: string;
+	org: string;
+	win: string; // one concise key achievement
+	metrics: { v: string; l: string }[];
+};
+
+// Story order: foundation → building → current peak.
+const milestones: Milestone[] = [
+	{
+		key: 'computing',
+		year: '2021 — 2025',
+		title: 'BSc Computing',
+		org: 'University of Greenwich · Da Nang',
+		win: 'Graduated top of the IT cohort — where the engineering foundation was built.',
+		metrics: [
+			{ v: '1st', l: 'IT Valedictorian' },
+			{ v: '4yr', l: 'BSc Computing' },
+		],
+	},
+	{
+		key: 'freelance',
+		year: '2022 — Present',
+		title: 'Freelance Developer & Designer',
+		org: 'Self-employed',
+		win: 'Took products end to end for clients — idea, design, build, ship, maintain.',
+		metrics: [
+			{ v: '4+', l: 'Years Shipping' },
+			{ v: '—', l: 'Projects Delivered' },
+		],
+	},
+	{
+		key: 'teacher',
+		year: '2022 — 2023',
+		title: 'English Teacher',
+		org: 'Education center',
+		win: 'Learned to explain complex ideas simply — communication that still pays off.',
+		metrics: [
+			{ v: '1yr', l: 'Teaching' },
+			{ v: '—', l: 'Students Taught' },
+		],
+	},
+	{
+		key: 'marketing',
+		year: 'Since 2022',
+		title: 'Marketing & Brand Design',
+		org: "Sam's English School · multi-brand",
+		win: 'Built & shipped samenglishschool.com plus campaigns across pets, gifts & F&B.',
+		metrics: [
+			{ v: '1', l: 'Live Website' },
+			{ v: '—', l: 'Designs Delivered' },
+		],
+	},
+	{
+		key: 'ecommerce',
+		year: 'Since 2022',
+		title: 'E-commerce & Online Sales',
+		org: 'Mecute · online stores',
+		win: 'SEO-ready listings and visual content built to convert browsers into buyers.',
+		metrics: [
+			{ v: '—', l: 'Products Listed' },
+			{ v: '—', l: 'Conversion Lift' },
+		],
+	},
+	{
+		key: 'android',
+		year: '2025 — Present',
+		title: 'Android Developer',
+		org: 'Lutech · Da Nang',
+		win: 'Shipping production Android with Kotlin, Compose and clean architecture.',
+		metrics: [
+			{ v: '2025', l: 'Joined Lutech' },
+			{ v: '—', l: 'Crash-free Rate' },
+		],
+	},
+];
+---
+
+<section class="section journey" id="about" aria-labelledby="about-title" data-parallax-root>
+	<SectionTitle id="about-title" eyebrow="the journey so far">Career Journey</SectionTitle>
+
+	<ol class="timeline" data-timeline>
+		<span class="line" aria-hidden="true"></span>
+
+		{
+			milestones.map((m) => {
+				const img = imgByKey[m.key];
+				return (
+					<li class="milestone">
+						<div class="visual reveal">
+							<div class="parallax" data-parallax="12">
+								{img ? (
+									<figure class="frame tilt" data-tilt="5">
+										<Image
+											src={img}
+											alt={`${m.title} — ${m.org}`}
+											width={1100}
+											height={690}
+											format="webp"
+											loading="lazy"
+										/>
+									</figure>
+								) : (
+									<figure class="frame tilt" data-tilt="5">
+										<img
+											src="/placeholder.png"
+											alt={`${m.title} — visual coming soon`}
+											width={1100}
+											height={690}
+											loading="lazy"
+										/>
+										<figcaption class="ph-note">{m.key}.jpg</figcaption>
+									</figure>
+								)}
+							</div>
+						</div>
+
+						<div class="rail" aria-hidden="true">
+							<span class="node" />
+						</div>
+
+						<div class="content reveal">
+							<span class="year eyebrow">{m.year}</span>
+							<h3 class="m-title">{m.title}</h3>
+							<p class="org text-accent">{m.org}</p>
+							<p class="win">{m.win}</p>
+							<dl class="stats">
+								{m.metrics.map((s) => (
+									<div class="stat">
+										<dd class="v">{s.v}</dd>
+										<dt class="l">{s.l}</dt>
+									</div>
+								))}
+							</dl>
+						</div>
+					</li>
+				);
+			})
+		}
+	</ol>
+</section>
+
+<style>
+	/* Full-bleed-ish: wider than the page container so visuals dominate. */
+	.journey {
+		--spine: 50%;
+		--rail: 5rem; /* 80px timeline column = 40px gap from content edge to spine */
+		position: relative;
+		max-width: 1680px;
+		margin-inline: auto;
+		padding-inline: var(--pad-x);
+	}
+
+	/* ---- Spine + progressive draw ---- */
+	.timeline {
+		position: relative;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	.timeline::before,
+	.line {
+		content: '';
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: var(--spine);
+		width: 2px;
+		margin-left: -1px;
+		border-radius: 2px;
+	}
+	.timeline::before {
+		background: var(--color-border-line);
+	}
+	.line {
+		background: linear-gradient(180deg, var(--color-primary), var(--color-primary-hover));
+		box-shadow: var(--glow-primary), 0 0 80px rgba(209, 235, 119, 0.25);
+		transform: scaleY(var(--draw, 0));
+		transform-origin: top center;
+		will-change: transform;
+	}
+
+	/* ---- Milestone row: image | rail | content, full width, centered ---- */
+	.milestone {
+		position: relative;
+		display: grid;
+		grid-template-columns: 1fr var(--rail) 1fr;
+		align-items: center;
+		min-height: min(62vh, 520px);
+	}
+
+	.visual {
+		grid-column: 1;
+		grid-row: 1;
+		width: 100%;
+		justify-self: stretch;
+	}
+	.content {
+		grid-column: 3;
+		grid-row: 1;
+	}
+
+	/* ---- Big glowing pulsing node, vertically centered on the row ---- */
+	.rail {
+		grid-column: 2;
+		grid-row: 1;
+		position: relative;
+		align-self: stretch;
+	}
+	.node {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		width: 1.5rem;
+		height: 1.5rem;
+		transform: translate(-50%, -50%);
+		border-radius: var(--radius-full);
+		background: var(--color-primary);
+		box-shadow: 0 0 0 6px var(--color-bg), 0 0 0 7px rgba(209, 235, 119, 0.35),
+			var(--glow-primary);
+	}
+	.node::after {
+		content: '';
+		position: absolute;
+		inset: -4px;
+		border-radius: var(--radius-full);
+		border: 2px solid var(--color-primary);
+		animation: nodePulse 2.6s var(--ease-out) infinite;
+	}
+
+	/* ---- Visual (dominant: the image fills its side while text stays compact) ---- */
+	.frame {
+		position: relative;
+		margin: 0;
+		aspect-ratio: 16 / 10;
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+		border: 1px solid var(--color-border-soft);
+		background: var(--color-surface);
+		transition: border-color var(--dur-base) var(--ease-out),
+			box-shadow var(--dur-base) var(--ease-out);
+	}
+	.frame :global(img) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+		transform: scale(1.18);
+		transition: transform 1s var(--ease-out);
+	}
+	.visual.is-visible .frame :global(img) {
+		transform: scale(1);
+	}
+	.visual.is-visible .frame {
+		border-color: var(--color-border);
+		box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+	}
+	.frame:hover {
+		border-color: var(--color-primary);
+		box-shadow: var(--glow-primary), 0 24px 70px rgba(0, 0, 0, 0.5);
+	}
+	.frame:hover :global(img) {
+		transform: scale(1.06);
+	}
+
+	/* placeholder badge — tên file cần thả vào assets/about */
+	.ph-note {
+		position: absolute;
+		left: var(--space-3);
+		bottom: var(--space-3);
+		margin: 0;
+		font-family: var(--font-mono);
+		font-size: var(--fs-xs);
+		color: var(--color-text);
+		background: rgba(8, 8, 11, 0.7);
+		border: 1px solid var(--color-border-line);
+		border-radius: var(--radius-full);
+		padding: var(--space-1) var(--space-3);
+		backdrop-filter: blur(4px);
+	}
+
+	/* ---- Content (concise, left-to-right reading, anchored near the spine) ---- */
+	.content {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-self: start;
+		width: 100%;
+		margin-right: auto;
+		text-align: left;
+	}
+	.year {
+		display: block;
+		margin-bottom: var(--space-3);
+	}
+	.m-title {
+		margin: 0;
+		font-family: var(--font-display);
+		text-transform: uppercase;
+		line-height: 1.05;
+		font-size: clamp(1.5rem, 1.9vw, 2rem);
+		letter-spacing: 0.02em;
+	}
+	.org {
+		margin: var(--space-2) 0 var(--space-5);
+		font-family: var(--font-mono);
+		font-size: var(--fs-sm);
+	}
+	.win {
+		margin: 0 0 var(--space-8);
+		font-size: var(--fs-base);
+		font-weight: var(--fw-extralight);
+		color: var(--color-text-muted);
+		max-width: 28rem;
+	}
+	.stats {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-3);
+		margin: 0;
+		justify-content: flex-start;
+	}
+	.stat {
+		flex: 1 1 0;
+		min-width: 9rem;
+		border: 1px solid var(--color-border-line);
+		border-radius: var(--radius-md);
+		background: var(--color-surface);
+		padding: var(--space-5);
+		transition: border-color var(--dur-fast), box-shadow var(--dur-fast),
+			transform var(--dur-fast);
+	}
+	.stat:hover {
+		border-color: var(--color-primary);
+		box-shadow: var(--glow-accent);
+		transform: translateY(-2px);
+	}
+	.stat .v {
+		margin: 0;
+		font-family: var(--font-display);
+		font-size: clamp(1.6rem, 2.2vw, 2.1rem);
+		line-height: 1;
+		color: var(--color-text);
+	}
+	.stat .l {
+		margin: var(--space-2) 0 0;
+		font-family: var(--font-mono);
+		font-size: var(--fs-xs);
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		color: var(--color-text-muted);
+	}
+
+	/* ---- Responsive: stack to single left rail ---- */
+	@media (max-width: 999px) {
+		.journey {
+			--spine: 1.25rem;
+			--rail: 2.5rem;
+		}
+		.milestone {
+			grid-template-columns: var(--rail) 1fr;
+			align-items: start;
+			min-height: 0;
+			padding-block: var(--space-8);
+		}
+		.visual,
+		.content {
+			grid-column: 2;
+			grid-row: auto;
+		}
+		.content {
+			justify-self: stretch;
+			text-align: left;
+			align-items: flex-start;
+			width: 100%;
+			max-width: none;
+			margin: 0;
+			padding: var(--space-8) 0 0;
+		}
+		.node {
+			top: 2.4rem;
+		}
+	}
+
+	@keyframes nodePulse {
+		0% {
+			transform: scale(0.9);
+			opacity: 0.7;
+		}
+		70%,
+		100% {
+			transform: scale(2.2);
+			opacity: 0;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.line {
+			transform: scaleY(1);
+		}
+		.node::after {
+			animation: none;
+		}
+		.frame :global(img),
+		.visual.is-visible .frame :global(img) {
+			transform: none;
+		}
+	}
+</style>
+
+<script>
+	// Progressive timeline draw — vanilla, rAF-throttled, reduced-motion aware.
+	const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+	const tl = document.querySelector<HTMLElement>('[data-timeline]');
+	if (tl) {
+		if (reduce) {
+			tl.style.setProperty('--draw', '1');
+		} else {
+			let raf = 0;
+			const update = () => {
+				raf = 0;
+				const r = tl.getBoundingClientRect();
+				const focus = innerHeight * 0.62; // line "fills" as it passes this point
+				const p = (focus - r.top) / r.height;
+				tl.style.setProperty('--draw', Math.min(1, Math.max(0, p)).toFixed(4));
+			};
+			const onScroll = () => {
+				if (!raf) raf = requestAnimationFrame(update);
+			};
+			addEventListener('scroll', onScroll, { passive: true });
+			addEventListener('resize', onScroll, { passive: true });
+			update();
+		}
+	}
+</script>

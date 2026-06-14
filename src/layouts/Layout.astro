@@ -1,23 +1,148 @@
+---
+import '../styles/design-system.css';
+
+/**
+ * Layout gốc — nơi duy nhất nạp font + global CSS + meta SEO.
+ * Ưu tiên: tốc độ tải & SEO (xem docs/design-system.astro.md).
+ */
+export interface Props {
+	title?: string;
+	description?: string;
+	image?: string;
+}
+
+const {
+	title = 'Bui Quang Minh — Android & Web Developer · UI/UX Designer',
+	description =
+		'Portfolio of Bui Quang Minh — Android Developer, Web Developer, UI/UX & Graphic Designer. Building fast, reliable and beautiful digital products.',
+	image = '/og-image.jpg',
+} = Astro.props;
+
+const canonical = Astro.url.href;
+const siteName = 'Bui Quang Minh';
+---
+
 <!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<link rel="canonical" href={canonical} />
+
+		<!-- Open Graph -->
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content={siteName} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonical} />
+		<meta property="og:image" content={new URL(image, Astro.url)} />
+
+		<!-- Twitter -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={new URL(image, Astro.url)} />
+
+		<!-- Fonts: preconnect + chỉ weight đang dùng + display=swap (không render-blocking) -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@200;300;400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+
+		<!-- JSON-LD: Person schema -->
+		<script
+			type="application/ld+json"
+			set:html={JSON.stringify({
+				'@context': 'https://schema.org',
+				'@type': 'Person',
+				name: 'Bui Quang Minh',
+				jobTitle: 'Android & Web Developer, UI/UX Designer',
+				url: 'https://buiminh.com/',
+				email: 'mailto:buiminhdn22@gmail.com',
+				sameAs: [
+					'https://www.linkedin.com/in/buiminhdn/',
+					'https://www.youtube.com/@MinhlaMinhh',
+					'https://www.facebook.com/bmint1709/',
+				],
+			})}
+		/>
 	</head>
 	<body>
 		<slot />
+
+		<!-- Motion: reveal + parallax + 3D tilt — JS vanilla, 0 KB framework, rAF-throttled. -->
+		<script>
+			// 1) Scroll reveal
+			const io = new IntersectionObserver(
+				(entries) => {
+					for (const e of entries) {
+						if (e.isIntersecting) {
+							e.target.classList.add('is-visible');
+							io.unobserve(e.target);
+						}
+					}
+				},
+				{ threshold: 0.15 },
+			);
+			document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+
+			// 2) Pointer-driven motion (parallax + tilt) — chỉ khi có chuột & không reduced-motion
+			const fine = matchMedia('(pointer: fine)').matches;
+			const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+			if (fine && !reduced) {
+				// Parallax: mỗi [data-parallax-root] điều khiển con [data-parallax]
+				document.querySelectorAll<HTMLElement>('[data-parallax-root]').forEach((root) => {
+					let raf = 0;
+					const layers = root.querySelectorAll<HTMLElement>('[data-parallax]');
+					root.addEventListener('pointermove', (e: PointerEvent) => {
+						if (raf) return;
+						raf = requestAnimationFrame(() => {
+							raf = 0;
+							const r = root.getBoundingClientRect();
+							const cx = (e.clientX - r.left) / r.width - 0.5;
+							const cy = (e.clientY - r.top) / r.height - 0.5;
+							layers.forEach((el) => {
+								const d = Number(el.dataset.parallax) || 12;
+								el.style.setProperty('--px', `${(-cx * d).toFixed(1)}px`);
+								el.style.setProperty('--py', `${(-cy * d).toFixed(1)}px`);
+							});
+						});
+					});
+					root.addEventListener('pointerleave', () => {
+						layers.forEach((el) => {
+							el.style.setProperty('--px', '0px');
+							el.style.setProperty('--py', '0px');
+						});
+					});
+				});
+
+				// Tilt: mỗi [data-tilt] nghiêng theo chuột trong chính nó
+				document.querySelectorAll<HTMLElement>('[data-tilt]').forEach((el) => {
+					const max = Number(el.dataset.tilt) || 8;
+					let raf = 0;
+					el.addEventListener('pointermove', (e: PointerEvent) => {
+						if (raf) return;
+						raf = requestAnimationFrame(() => {
+							raf = 0;
+							const r = el.getBoundingClientRect();
+							const cx = (e.clientX - r.left) / r.width - 0.5;
+							const cy = (e.clientY - r.top) / r.height - 0.5;
+							el.style.setProperty('--ry', `${(cx * max).toFixed(2)}deg`);
+							el.style.setProperty('--rx', `${(-cy * max).toFixed(2)}deg`);
+						});
+					});
+					el.addEventListener('pointerleave', () => {
+						el.style.setProperty('--rx', '0deg');
+						el.style.setProperty('--ry', '0deg');
+					});
+				});
+			}
+		</script>
 	</body>
 </html>
-
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>

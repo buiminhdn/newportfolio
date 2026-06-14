@@ -1,0 +1,51 @@
+---
+/**
+ * Infinite tech-stack marquee — CSS thuần (xem .marquee trong design-system.css).
+ * Nội dung lặp 2 lần (bản 2 aria-hidden) để cuộn liền mạch -50%.
+ */
+const stack = [
+	'Kotlin', 'Jetpack Compose', 'Coroutines', 'Flow', 'Clean Architecture',
+	'Next.js', 'React', 'React Native', 'TypeScript', 'Astro', '.NET Core',
+	'PostgreSQL', 'Redis', 'SignalR', 'Supabase', 'Firebase', 'AWS', 'Figma',
+];
+---
+
+<section class="band" aria-label="Tech stack">
+	<div class="marquee">
+		<div class="marquee__track">
+			<ul class="row">
+				{stack.map((s) => <li>{s}</li>)}
+			</ul>
+			<ul class="row" aria-hidden="true">
+				{stack.map((s) => <li>{s}</li>)}
+			</ul>
+		</div>
+	</div>
+</section>
+
+<style>
+	.band {
+		border-block: 1px solid var(--color-border-line);
+		padding-block: var(--space-6);
+		margin-top: var(--space-32);
+	}
+	.row {
+		display: flex;
+		align-items: center;
+		gap: var(--space-10);
+		list-style: none;
+		margin: 0;
+		padding: 0 var(--space-5) 0 0;
+	}
+	.row li {
+		font-family: var(--font-mono);
+		font-size: var(--fs-lg);
+		color: var(--color-text-muted);
+		white-space: nowrap;
+	}
+	.row li::after {
+		content: '/';
+		margin-left: var(--space-10);
+		color: var(--color-primary);
+	}
+</style>

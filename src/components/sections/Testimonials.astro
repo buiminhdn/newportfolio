@@ -1,0 +1,70 @@
+---
+import SectionTitle from '../SectionTitle.astro';
+
+/**
+ * Social Proof — TODO: thay bằng testimonial THẬT (client / colleague / founder / manager).
+ * Đang để slot trống có chủ đích — KHÔNG bịa lời chứng thực.
+ */
+const slots = [
+	{ role: 'Client', who: 'TODO: name · company' },
+	{ role: 'Colleague', who: 'TODO: name · role' },
+	{ role: 'Founder / Manager', who: 'TODO: name · company' },
+];
+---
+
+<section class="section container" id="testimonials" aria-labelledby="tm-title">
+	<SectionTitle id="tm-title" eyebrow="social proof">Testimonials</SectionTitle>
+
+	<div class="tm-grid">
+		{
+			slots.map((s, i) => (
+				<figure class="tm metric reveal" style={`--i:${i}`}>
+					<blockquote class="quote text-muted">
+						“TODO: a real quote about working with me — what problem was solved and the impact.”
+					</blockquote>
+					<figcaption>
+						<span class="name">{s.who}</span>
+						<span class="role eyebrow">{s.role}</span>
+					</figcaption>
+				</figure>
+			))
+		}
+	</div>
+</section>
+
+<style>
+	.tm-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--space-6);
+	}
+	.tm {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		gap: var(--space-6);
+		padding: var(--space-8);
+	}
+	.quote {
+		margin: 0;
+		font-size: var(--fs-lg);
+		font-weight: var(--fw-light);
+		line-height: 1.5;
+	}
+	figcaption {
+		display: grid;
+		gap: var(--space-1);
+	}
+	.name {
+		font-weight: var(--fw-medium);
+		font-size: var(--fs-sm);
+	}
+	.role {
+		display: block;
+	}
+	@media (min-width: 768px) {
+		.tm-grid {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+</style>

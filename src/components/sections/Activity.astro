@@ -1,0 +1,71 @@
+---
+import SectionTitle from '../SectionTitle.astro';
+
+/**
+ * Activity — cho thấy đang liên tục phát triển.
+ * Link tới kênh thật; phần số liệu/feed để slot TODO (không bịa).
+ */
+const items = [
+	{
+		title: 'Open Source & Experiments',
+		desc: 'Android tools, Compose components and product experiments.',
+		cta: { label: 'GitHub ↗', href: 'https://github.com/' }, // TODO: đúng username GitHub
+	},
+	{
+		title: 'Building in Public',
+		desc: 'Product walkthroughs and dev notes on YouTube.',
+		cta: { label: 'YouTube ↗', href: 'https://www.youtube.com/@MinhlaMinhh' },
+	},
+	{
+		title: 'Marcus Labs',
+		desc: 'Small, free, privacy-friendly Android apps — shipped continuously.',
+		cta: { label: 'marcus.buiminh.com ↗', href: 'https://marcus.buiminh.com/' },
+	},
+];
+---
+
+<section class="section container" id="activity" aria-labelledby="activity-title">
+	<SectionTitle id="activity-title" eyebrow="always shipping">Activity</SectionTitle>
+
+	<div class="act-grid">
+		{
+			items.map((it, i) => (
+				<article class="act metric reveal" style={`--i:${i}`}>
+					<h3 class="text-h3">{it.title}</h3>
+					<p class="text-muted fw-extralight">{it.desc}</p>
+					<a href={it.cta.href} class="link" target="_blank" rel="noopener">
+						{it.cta.label}
+					</a>
+				</article>
+			))
+		}
+	</div>
+</section>
+
+<style>
+	.act-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--space-6);
+	}
+	.act {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-3);
+		padding: var(--space-8);
+	}
+	.act h3 {
+		margin: 0;
+		font-size: var(--fs-lg);
+	}
+	.act p {
+		margin: 0;
+		font-size: var(--fs-sm);
+		flex: 1;
+	}
+	@media (min-width: 768px) {
+		.act-grid {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+</style>

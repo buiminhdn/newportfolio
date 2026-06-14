@@ -1,0 +1,482 @@
+/* ==========================================================================
+   Design System — Bui Quang Minh Portfolio
+   HTML/CSS thuần. Trích xuất từ design hiện tại (React + Tailwind v4).
+   Cách dùng:  <link rel="stylesheet" href="design-system.css">
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. FONTS
+   --------------------------------------------------------------------------
+   KHÔNG dùng @import ở đây — gây render-blocking, hỏng LCP/Core Web Vitals.
+   Nạp font ở <head> của Astro layout (xem design-system.astro.md), ưu tiên:
+   (a) self-host qua @fontsource — nhanh & SEO tốt nhất, hoặc
+   (b) <link preconnect> + <link> Google Fonts với chỉ weight đang dùng.
+   Weight thực dùng: Bebas Neue 400 · Poppins 200,300,400,500,600.
+   -------------------------------------------------------------------------- */
+
+/* --------------------------------------------------------------------------
+   2. DESIGN TOKENS  (CSS Custom Properties)
+   -------------------------------------------------------------------------- */
+:root {
+  /* ---- Color — Futuristic Dashboard × Neo Brutalism ----
+     MỘT màu duy nhất: lime #D1EB77 (primary = accent). Phần còn lại là nền tối + trắng. */
+  --color-primary:        #d1eb77;  /* accent duy nhất của toàn site */
+  --color-primary-hover:  #c2e055;
+  --color-accent:         #d1eb77;  /* = primary (giữ cùng 1 màu) */
+  --color-secondary:      #17171f;  /* nền card / icon */
+  --color-bg:             #08080b;  /* nền trang (near-black, hơi lạnh) */
+  --color-surface:        #101015;  /* nền nổi nhẹ */
+  --color-on-primary:     #08080b;  /* chữ tối trên nền cyan (đủ tương phản) */
+  --color-black:          #000000;
+
+  --color-text:           #f5f5f7;  /* chữ chính */
+  --color-text-muted:     #a1a1aa;  /* zinc-400 — mô tả phụ */
+  --color-text-subtle:    #d4d4d8;  /* zinc-300 — chip text */
+
+  --color-border:         #52525b;  /* zinc-600 — viền chip/pill */
+  --color-border-soft:    #34343f;  /* divider */
+  --color-border-line:    #26262e;  /* đường kẻ / grid */
+
+  /* Glow & brutalist surfaces — đều dùng lime */
+  --glow-primary:  0 0 40px rgba(209, 235, 119, 0.35);
+  --glow-accent:   0 0 32px rgba(209, 235, 119, 0.30);
+  --brutal-shadow: 6px 6px 0 var(--color-primary);
+
+  /* ---- Typography ---- */
+  --font-display: "Bebas Neue", sans-serif;  /* tiêu đề, in hoa */
+  --font-body:    "Poppins", sans-serif;     /* body */
+  --font-mono:    ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace; /* data label, 0 KB */
+
+  --fw-extralight: 200;
+  --fw-light:      300;
+  --fw-regular:    400;
+  --fw-medium:     500;
+  --fw-semibold:   600;
+
+  /* Type scale (clamp = responsive mượt theo viewport) */
+  --fs-hero:     clamp(3rem, 8vw, 6rem);      /* text-5xl → 8xl */
+  --fs-section:  clamp(3rem, 6vw, 4.5rem);    /* text-5xl → 7xl */
+  --fs-h2:       clamp(1.75rem, 3vw, 2.25rem);/* sub-heading */
+  --fs-h3:       1.5rem;                       /* tên item */
+  --fs-stat:     clamp(2.5rem, 5vw, 4rem);     /* số liệu lớn (metric) */
+  --fs-lg:       1.125rem;                     /* body lớn */
+  --fs-base:     1rem;
+  --fs-sm:       0.875rem;
+  --fs-xs:       0.75rem;
+
+  --lh-tight:    1.1;
+  --lh-normal:   1.6;
+
+  /* ---- Spacing scale (rem) ---- */
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-5:  1.25rem;
+  --space-6:  1.5rem;
+  --space-8:  2rem;
+  --space-10: 2.5rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+
+  /* Padding ngang container (px-6 sm:px-16) */
+  --pad-x: var(--space-6);
+
+  /* ---- Radius ---- */
+  --radius-md:   0.75rem;  /* rounded-xl  — card, ảnh hero */
+  --radius-lg:   1rem;     /* rounded-2xl — ảnh grid */
+  --radius-full: 9999px;   /* pill, nút, chip */
+
+  /* ---- Layout ---- */
+  --container-max: 1280px;
+
+  /* ---- Shadow ---- */
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+
+  /* ---- Motion ---- */
+  --dur-fast:   0.3s;
+  --dur-base:   0.6s;
+  --dur-slow:   0.8s;
+  --ease-out:   cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (min-width: 640px) {
+  :root { --pad-x: var(--space-16); }  /* sm:px-16 */
+}
+
+/* --------------------------------------------------------------------------
+   3. RESET / BASE
+   -------------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: var(--fw-regular);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  line-height: var(--lh-normal);
+  -webkit-font-smoothing: antialiased;
+}
+
+img { display: block; max-width: 100%; }
+a   { color: inherit; text-decoration: none; }
+
+/* --------------------------------------------------------------------------
+   4. TYPOGRAPHY UTILITIES
+   -------------------------------------------------------------------------- */
+.display      { font-family: var(--font-display); text-transform: uppercase; line-height: var(--lh-tight); }
+.text-hero    { font-family: var(--font-display); text-transform: uppercase; font-size: var(--fs-hero);    line-height: var(--lh-tight); }
+.text-section { font-family: var(--font-display); text-transform: uppercase; font-size: var(--fs-section); line-height: var(--lh-tight); }
+.text-h2      { font-size: var(--fs-h2); font-weight: var(--fw-regular); }
+.text-h3      { font-size: var(--fs-h3); font-weight: var(--fw-semibold); }
+
+.text-muted   { color: var(--color-text-muted); }
+.text-primary { color: var(--color-primary); }
+
+.fw-extralight { font-weight: var(--fw-extralight); }
+.fw-light      { font-weight: var(--fw-light); }
+.fw-medium     { font-weight: var(--fw-medium); }
+
+.lead { font-weight: var(--fw-extralight); font-size: var(--fs-lg); }
+
+/* --------------------------------------------------------------------------
+   5. LAYOUT
+   -------------------------------------------------------------------------- */
+.container {
+  padding-inline: var(--pad-x);
+  max-width: var(--container-max);
+  margin-inline: auto;
+}
+
+.section { margin-top: var(--space-32); }
+
+/* Grid 2 cột: gộp 1 cột < 1280px */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-10);
+  align-items: center;
+}
+
+/* Lưới ảnh */
+.grid-cards   { display: grid; grid-template-columns: 1fr; gap: var(--space-10); }
+
+/* Title trái / content phải */
+.split {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+  justify-content: space-between;
+}
+
+@media (min-width: 1280px) {
+  .grid-2       { grid-template-columns: 1fr 1fr; gap: var(--space-20); }
+  .grid-cards-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid-cards-5 { grid-template-columns: repeat(5, 1fr); }
+  .split        { flex-direction: row; gap: var(--space-24); }
+}
+@media (min-width: 640px) {
+  .grid-cards-3, .grid-cards-5 { grid-template-columns: repeat(2, 1fr); }
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--color-border-soft);
+  margin-block: var(--space-32);
+}
+
+/* --------------------------------------------------------------------------
+   6. COMPONENTS
+   -------------------------------------------------------------------------- */
+
+/* 6.1 Primary Button — kiểu "dấu chấm" lệch góc */
+.btn-primary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 3.5rem;
+  padding: 0 3.5rem 0 1.25rem;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-weight: var(--fw-medium);
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+  transition: transform var(--dur-fast), background var(--dur-fast);
+}
+.btn-primary::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 1.5rem;
+  transform: translateY(-50%);
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: var(--radius-full);
+  background: currentColor;
+}
+.btn-primary:hover { background: var(--color-primary-hover); transform: scale(1.05); }
+
+/* 6.2 Outline Button */
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-2) var(--space-4);
+  color: var(--color-primary);
+  background: transparent;
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform var(--dur-fast);
+}
+.btn-outline:hover { transform: scale(1.05); }
+
+/* 6.3 Floating button (back to top) */
+.btn-float {
+  position: fixed;
+  bottom: var(--space-6);
+  right: var(--space-6);
+  z-index: 50;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border: none;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  transition: transform var(--dur-fast);
+}
+.btn-float:hover { transform: scale(1.1); }
+
+/* 6.4 Chip / Tag */
+.chip {
+  display: inline-block;
+  font-size: var(--fs-sm);
+  color: var(--color-text-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  padding: var(--space-1) var(--space-3);
+}
+
+/* 6.5 Skill Pill (lớn hơn chip) */
+.pill {
+  display: inline-block;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  padding: var(--space-3) var(--space-8);
+}
+
+/* 6.6 Badge (góc ảnh) */
+.badge {
+  position: absolute;
+  top: var(--space-4);
+  left: var(--space-4);
+  background: var(--color-black);
+  color: var(--color-text);
+  font-size: var(--fs-xs);
+  border-radius: var(--radius-full);
+  padding: var(--space-2) var(--space-4);
+}
+
+/* 6.7 Contact pill (viền primary) */
+.pill-contact {
+  display: inline-block;
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-full);
+  padding: 0.375rem var(--space-5);
+}
+
+/* 6.8 Text link */
+.link {
+  color: var(--color-primary);
+  transition: opacity var(--dur-fast);
+}
+.link:hover { text-decoration: underline; }
+
+/* 6.9 Social icon */
+.social {
+  width: 3.5rem;
+  height: 3.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-secondary);
+  border-radius: var(--radius-full);
+  transition: opacity var(--dur-fast);
+}
+.social:hover { opacity: 0.8; }
+.social img { width: 2rem; height: 2rem; object-fit: contain; }
+
+/* 6.10 Card / Project image block */
+.card {
+  position: relative;
+  background: var(--color-secondary);
+  border-radius: var(--radius-md);
+  padding: var(--space-16) var(--space-8);
+}
+.card > img { width: 100%; height: 20rem; object-fit: cover; border-radius: var(--radius-lg); }
+
+/* 6.11 Info row (Tech Stack / Highlight) */
+.info-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-block: var(--space-4);
+  border-top: 1px solid var(--color-border-line);
+}
+.info-row:last-child { border-bottom: 1px solid var(--color-border-line); }
+.info-row .label { flex: none; width: 13rem; font-weight: var(--fw-light); font-size: var(--fs-sm); }
+.info-row .values { display: flex; flex-wrap: wrap; gap: var(--space-2); justify-content: flex-end; }
+
+/* 6.12 Ảnh grid item */
+.media {
+  width: 100%;
+  height: 24rem;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+}
+.media-sm { height: 15rem; }
+
+/* --------------------------------------------------------------------------
+   7. MOTION  (reveal khi scroll — thêm class .reveal, JS gắn .is-visible)
+   -------------------------------------------------------------------------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity var(--dur-base) var(--ease-out),
+              transform var(--dur-base) var(--ease-out);
+}
+.reveal.from-left  { transform: translateX(-40px); }
+.reveal.from-right { transform: translateX(40px); }
+.reveal.is-visible { opacity: 1; transform: none; }
+
+/* Stagger: đặt --i (chỉ số) trên item để xếp tầng delay */
+.reveal[style*="--i"] { transition-delay: calc(var(--i) * 0.08s); }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  html { scroll-behavior: auto; }
+}
+
+/* ==========================================================================
+   8. FUTURISTIC DASHBOARD × NEO BRUTALISM  (vanilla, 0 KB JS)
+   ========================================================================== */
+
+/* 8.1 Eyebrow / data label — mono, in hoa, có dấu chấm dẫn */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--color-accent);
+}
+.eyebrow::before { content: "// "; opacity: 0.7; }
+
+/* 8.2 Glow helpers */
+.glow        { box-shadow: var(--glow-primary); }
+.glow-accent { box-shadow: var(--glow-accent); }
+.text-accent { color: var(--color-accent); }
+.text-glow   { text-shadow: 0 0 24px rgba(209, 235, 119, 0.55); }
+
+/* 8.3 Technical grid background — đặt trong phần tử position:relative
+   Dùng ::before phủ kín, fade theo radial mask. Không ảnh, 0 request. */
+.grid-bg { position: relative; isolation: isolate; }
+.grid-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(var(--color-border-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-border-line) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 80%);
+          mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 80%);
+  opacity: 0.5;
+}
+
+/* 8.4 Metric card — số liệu lớn + nhãn mono. (slot data → đặt TODO ở markup) */
+.metric {
+  border: 1px solid var(--color-border-line);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  padding: var(--space-6);
+  transition: border-color var(--dur-fast), box-shadow var(--dur-fast), transform var(--dur-fast);
+}
+.metric:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--glow-primary);
+  transform: translateY(-2px);
+}
+.metric .value {
+  font-family: var(--font-display);
+  font-size: var(--fs-stat);
+  line-height: 1;
+  color: var(--color-text);
+}
+.metric .value .unit { color: var(--color-primary); }
+.metric .label {
+  margin-top: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+}
+
+/* 8.5 Brutalist surface — viền cứng + đổ bóng offset đặc */
+.brutal {
+  border: 2px solid var(--color-text);
+  border-radius: var(--radius-md);
+  background: var(--color-secondary);
+  box-shadow: var(--brutal-shadow);
+  transition: transform var(--dur-fast), box-shadow var(--dur-fast);
+}
+.brutal:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 9px 9px 0 var(--color-primary);
+}
+
+/* 8.6 Infinite marquee — chạy ngang vô hạn (CSS thuần).
+   Markup: .marquee > .marquee__track > (nội dung) + (bản sao aria-hidden). */
+.marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.marquee__track {
+  display: flex;
+  width: max-content;
+  gap: var(--space-10);
+  animation: marquee var(--marquee-dur, 28s) linear infinite;
+}
+.marquee:hover .marquee__track { animation-play-state: paused; }
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* 8.7 Tilt — JS gắn biến --rx/--ry (deg) theo chuột; CSS lo phần render */
+.tilt {
+  transform: perspective(800px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transform-style: preserve-3d;
+  transition: transform var(--dur-fast) var(--ease-out);
+  will-change: transform;
+}
+
+/* 8.8 Parallax layer — JS set --px/--py (px) theo chuột */
+.parallax { transform: translate3d(var(--px, 0), var(--py, 0), 0); transition: transform 0.15s linear; }
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track { animation: none; }
+  .tilt, .parallax { transform: none; }
+}

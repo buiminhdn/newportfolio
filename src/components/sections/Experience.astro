@@ -1,0 +1,117 @@
+---
+import SectionTitle from '../SectionTitle.astro';
+
+/**
+ * Experience — vertical timeline. Mỗi mốc nêu ACHIEVEMENTS, không chỉ mô tả.
+ * Achievements có số liệu → TODO (không bịa).
+ */
+const jobs = [
+	{
+		role: 'Android Developer',
+		org: 'Lutech Da Nang',
+		period: '09/2025 — Present',
+		points: [
+			'Building production Android apps with Kotlin & Jetpack Compose.',
+			'Clean architecture, testable code, smooth release workflow.',
+			'TODO: achievement with real metric (e.g. users / crash-free rate).',
+		],
+	},
+	{
+		role: 'Freelance Developer & Designer',
+		org: 'Self-employed',
+		period: '01/2022 — Present',
+		points: [
+			'Designed & shipped websites, Android apps, UI/UX and Canva content.',
+			'Worked directly with clients: requirements → design → build → maintain.',
+			'TODO: achievement with real metric (e.g. projects delivered / clients).',
+		],
+	},
+	{
+		role: 'English Teacher',
+		org: 'Education center',
+		period: '09/2022 — 07/2023',
+		points: [
+			'Taught English and sharpened presentation & communication skills.',
+			'Learned to explain complex ideas to diverse audiences.',
+		],
+	},
+];
+---
+
+<section class="section container" id="experience" aria-labelledby="exp-title">
+	<SectionTitle id="exp-title" eyebrow="track record">Experience</SectionTitle>
+
+	<ol class="timeline">
+		{
+			jobs.map((j, i) => (
+				<li class="node reveal" style={`--i:${i}`}>
+					<span class="period eyebrow">{j.period}</span>
+					<h3 class="text-h3">{j.role}</h3>
+					<p class="org text-accent">{j.org}</p>
+					<ul class="points">
+						{j.points.map((p) => (
+							<li class="text-muted fw-extralight">{p}</li>
+						))}
+					</ul>
+				</li>
+			))
+		}
+	</ol>
+</section>
+
+<style>
+	.timeline {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: var(--space-12);
+	}
+	.node {
+		position: relative;
+		padding-left: var(--space-10);
+		border-left: 2px solid var(--color-border-line);
+	}
+	.node::before {
+		content: '';
+		position: absolute;
+		left: -0.5rem;
+		top: 0.2rem;
+		width: 0.9rem;
+		height: 0.9rem;
+		border-radius: var(--radius-full);
+		background: var(--color-primary);
+		box-shadow: var(--glow-primary);
+	}
+	.period {
+		display: block;
+		margin-bottom: var(--space-2);
+	}
+	.node h3 {
+		margin: 0;
+	}
+	.org {
+		margin: var(--space-1) 0 var(--space-4);
+		font-family: var(--font-mono);
+		font-size: var(--fs-sm);
+	}
+	.points {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: grid;
+		gap: var(--space-2);
+		max-width: 48rem;
+	}
+	.points li {
+		position: relative;
+		padding-left: var(--space-5);
+		font-size: var(--fs-sm);
+	}
+	.points li::before {
+		content: '▹';
+		position: absolute;
+		left: 0;
+		color: var(--color-accent);
+	}
+</style>
