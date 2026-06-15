@@ -1,8 +1,7 @@
 # Ảnh dự án
 
-Thả ảnh preview/hero của từng dự án vào đây, đặt tên đúng theo `slug` trong
-`src/data/projects.ts`. Cùng một ảnh được dùng cho card ở trang home và hero ở
-trang chi tiết `/projects/<slug>`.
+Thả ảnh preview của từng dự án vào đây, đặt tên đúng theo `slug` trong
+`src/data/projects.ts`. Ảnh được dùng cho card/lead trong section Work ở trang home.
 
 Web / App:
 

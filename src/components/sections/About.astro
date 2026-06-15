@@ -4,15 +4,9 @@ import type { ImageMetadata } from 'astro';
 import SectionTitle from '../SectionTitle.astro';
 
 /**
- * Career Journey — full-width storytelling timeline (replaces old About).
- * One centered spine that grows on scroll; each milestone fills the viewport
- * width with image on the left and content on the right.
- *
- * Visuals dominate (~48% width each side). Text is deliberately minimal:
- * title · company · period · one key achievement · impact metrics.
- *
- * Ảnh: thả vào src/assets/about/<key>.{jpg,png,webp...} (xem README ở đó).
- * Số liệu "—" là slot TODO — điền số THẬT, không bịa.
+ * Career Journey — static timeline: image + content per milestone.
+ * Images: src/assets/about/<key>.{jpg,png,webp...}; none → /placeholder.png.
+ * Metrics "—" are TODO slots — fill with real numbers.
  */
 const aboutImgs = import.meta.glob<{ default: ImageMetadata }>(
 	'../../assets/about/*.{jpg,jpeg,png,webp,avif}',
@@ -105,50 +99,46 @@ const milestones: Milestone[] = [
 ];
 ---
 
-<section class="section journey" id="about" aria-labelledby="about-title" data-parallax-root>
+<section class="section journey" id="about" aria-labelledby="about-title">
 	<SectionTitle id="about-title" eyebrow="the journey so far">Career Journey</SectionTitle>
 
-	<ol class="timeline" data-timeline>
-		<span class="line" aria-hidden="true"></span>
-
+	<ol class="timeline">
 		{
 			milestones.map((m) => {
 				const img = imgByKey[m.key];
 				return (
 					<li class="milestone">
-						<div class="visual reveal">
-							<div class="parallax" data-parallax="12">
-								{img ? (
-									<figure class="frame tilt" data-tilt="5">
-										<Image
-											src={img}
-											alt={`${m.title} — ${m.org}`}
-											width={1100}
-											height={690}
-											format="webp"
-											loading="lazy"
-										/>
-									</figure>
-								) : (
-									<figure class="frame tilt" data-tilt="5">
-										<img
-											src="/placeholder.png"
-											alt={`${m.title} — visual coming soon`}
-											width={1100}
-											height={690}
-											loading="lazy"
-										/>
-										<figcaption class="ph-note">{m.key}.jpg</figcaption>
-									</figure>
-								)}
-							</div>
+						<div class="visual">
+							{img ? (
+								<figure class="frame">
+									<Image
+										src={img}
+										alt={`${m.title} — ${m.org}`}
+										width={1100}
+										height={690}
+										format="webp"
+										loading="lazy"
+									/>
+								</figure>
+							) : (
+								<figure class="frame">
+									<img
+										src="/placeholder.png"
+										alt={`${m.title} — visual coming soon`}
+										width={1100}
+										height={690}
+										loading="lazy"
+									/>
+									<figcaption class="ph-note">{m.key}.jpg</figcaption>
+								</figure>
+							)}
 						</div>
 
 						<div class="rail" aria-hidden="true">
 							<span class="node" />
 						</div>
 
-						<div class="content reveal">
+						<div class="content">
 							<span class="year eyebrow">{m.year}</span>
 							<h3 class="m-title">{m.title}</h3>
 							<p class="org text-accent">{m.org}</p>
@@ -170,25 +160,24 @@ const milestones: Milestone[] = [
 </section>
 
 <style>
-	/* Full-bleed-ish: wider than the page container so visuals dominate. */
+	/* Width matches the page container (same as hero). */
 	.journey {
 		--spine: 50%;
 		--rail: 5rem; /* 80px timeline column = 40px gap from content edge to spine */
 		position: relative;
-		max-width: 1680px;
+		max-width: var(--container-max);
 		margin-inline: auto;
 		padding-inline: var(--pad-x);
 	}
 
-	/* ---- Spine + progressive draw ---- */
+	/* ---- Spine ---- */
 	.timeline {
 		position: relative;
 		list-style: none;
 		margin: 0;
 		padding: 0;
 	}
-	.timeline::before,
-	.line {
+	.timeline::before {
 		content: '';
 		position: absolute;
 		top: 0;
@@ -197,19 +186,10 @@ const milestones: Milestone[] = [
 		width: 2px;
 		margin-left: -1px;
 		border-radius: 2px;
-	}
-	.timeline::before {
 		background: var(--color-border-line);
 	}
-	.line {
-		background: linear-gradient(180deg, var(--color-primary), var(--color-primary-hover));
-		box-shadow: var(--glow-primary), 0 0 80px rgba(209, 235, 119, 0.25);
-		transform: scaleY(var(--draw, 0));
-		transform-origin: top center;
-		will-change: transform;
-	}
 
-	/* ---- Milestone row: image | rail | content, full width, centered ---- */
+	/* ---- Milestone row: image | rail | content ---- */
 	.milestone {
 		position: relative;
 		display: grid;
@@ -229,7 +209,7 @@ const milestones: Milestone[] = [
 		grid-row: 1;
 	}
 
-	/* ---- Big glowing pulsing node, vertically centered on the row ---- */
+	/* ---- Node on the spine ---- */
 	.rail {
 		grid-column: 2;
 		grid-row: 1;
@@ -242,22 +222,13 @@ const milestones: Milestone[] = [
 		top: 50%;
 		width: 1.5rem;
 		height: 1.5rem;
-		transform: translate(-50%, -50%);
+		margin: -0.75rem 0 0 -0.75rem;
 		border-radius: var(--radius-full);
 		background: var(--color-primary);
-		box-shadow: 0 0 0 6px var(--color-bg), 0 0 0 7px rgba(209, 235, 119, 0.35),
-			var(--glow-primary);
-	}
-	.node::after {
-		content: '';
-		position: absolute;
-		inset: -4px;
-		border-radius: var(--radius-full);
-		border: 2px solid var(--color-primary);
-		animation: nodePulse 2.6s var(--ease-out) infinite;
+		box-shadow: 0 0 0 6px var(--color-bg);
 	}
 
-	/* ---- Visual (dominant: the image fills its side while text stays compact) ---- */
+	/* ---- Visual ---- */
 	.frame {
 		position: relative;
 		margin: 0;
@@ -266,49 +237,30 @@ const milestones: Milestone[] = [
 		overflow: hidden;
 		border: 1px solid var(--color-border-soft);
 		background: var(--color-surface);
-		transition: border-color var(--dur-base) var(--ease-out),
-			box-shadow var(--dur-base) var(--ease-out);
 	}
 	.frame :global(img) {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
 		display: block;
-		transform: scale(1.18);
-		transition: transform 1s var(--ease-out);
-	}
-	.visual.is-visible .frame :global(img) {
-		transform: scale(1);
-	}
-	.visual.is-visible .frame {
-		border-color: var(--color-border);
-		box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
-	}
-	.frame:hover {
-		border-color: var(--color-primary);
-		box-shadow: var(--glow-primary), 0 24px 70px rgba(0, 0, 0, 0.5);
-	}
-	.frame:hover :global(img) {
-		transform: scale(1.06);
 	}
 
-	/* placeholder badge — tên file cần thả vào assets/about */
+	/* placeholder badge — file name to drop into assets/about */
 	.ph-note {
 		position: absolute;
 		left: var(--space-3);
 		bottom: var(--space-3);
 		margin: 0;
-		font-family: var(--font-mono);
+		font-family: var(--font);
 		font-size: var(--fs-xs);
 		color: var(--color-text);
 		background: rgba(8, 8, 11, 0.7);
 		border: 1px solid var(--color-border-line);
 		border-radius: var(--radius-full);
 		padding: var(--space-1) var(--space-3);
-		backdrop-filter: blur(4px);
 	}
 
-	/* ---- Content (concise, left-to-right reading, anchored near the spine) ---- */
+	/* ---- Content ---- */
 	.content {
 		display: flex;
 		flex-direction: column;
@@ -324,7 +276,7 @@ const milestones: Milestone[] = [
 	}
 	.m-title {
 		margin: 0;
-		font-family: var(--font-display);
+		font-family: var(--font);
 		text-transform: uppercase;
 		line-height: 1.05;
 		font-size: clamp(1.5rem, 1.9vw, 2rem);
@@ -332,7 +284,7 @@ const milestones: Milestone[] = [
 	}
 	.org {
 		margin: var(--space-2) 0 var(--space-5);
-		font-family: var(--font-mono);
+		font-family: var(--font);
 		font-size: var(--fs-sm);
 	}
 	.win {
@@ -356,24 +308,17 @@ const milestones: Milestone[] = [
 		border-radius: var(--radius-md);
 		background: var(--color-surface);
 		padding: var(--space-5);
-		transition: border-color var(--dur-fast), box-shadow var(--dur-fast),
-			transform var(--dur-fast);
-	}
-	.stat:hover {
-		border-color: var(--color-primary);
-		box-shadow: var(--glow-accent);
-		transform: translateY(-2px);
 	}
 	.stat .v {
 		margin: 0;
-		font-family: var(--font-display);
+		font-family: var(--font);
 		font-size: clamp(1.6rem, 2.2vw, 2.1rem);
 		line-height: 1;
 		color: var(--color-text);
 	}
 	.stat .l {
 		margin: var(--space-2) 0 0;
-		font-family: var(--font-mono);
+		font-family: var(--font);
 		font-size: var(--fs-xs);
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
@@ -408,57 +353,7 @@ const milestones: Milestone[] = [
 		}
 		.node {
 			top: 2.4rem;
-		}
-	}
-
-	@keyframes nodePulse {
-		0% {
-			transform: scale(0.9);
-			opacity: 0.7;
-		}
-		70%,
-		100% {
-			transform: scale(2.2);
-			opacity: 0;
-		}
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.line {
-			transform: scaleY(1);
-		}
-		.node::after {
-			animation: none;
-		}
-		.frame :global(img),
-		.visual.is-visible .frame :global(img) {
-			transform: none;
+			margin-top: 0;
 		}
 	}
 </style>
-
-<script>
-	// Progressive timeline draw — vanilla, rAF-throttled, reduced-motion aware.
-	const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-	const tl = document.querySelector<HTMLElement>('[data-timeline]');
-	if (tl) {
-		if (reduce) {
-			tl.style.setProperty('--draw', '1');
-		} else {
-			let raf = 0;
-			const update = () => {
-				raf = 0;
-				const r = tl.getBoundingClientRect();
-				const focus = innerHeight * 0.62; // line "fills" as it passes this point
-				const p = (focus - r.top) / r.height;
-				tl.style.setProperty('--draw', Math.min(1, Math.max(0, p)).toFixed(4));
-			};
-			const onScroll = () => {
-				if (!raf) raf = requestAnimationFrame(update);
-			};
-			addEventListener('scroll', onScroll, { passive: true });
-			addEventListener('resize', onScroll, { passive: true });
-			update();
-		}
-	}
-</script>

@@ -2,13 +2,12 @@
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import SectionTitle from '../SectionTitle.astro';
-import { designShowcase } from '../../data/designShowcase';
+import { brands } from '../../data/designShowcase';
 
 /**
- * Creative Design Showcase — asymmetrical Bento Grid (dark luxury).
- * Không hover effect. Text (category + title) luôn nằm trên ảnh, có gradient để đọc.
- * Kích thước ô do col/row trong data. Ảnh cover lấp đầy ô.
- * Ảnh thật: src/assets/design/<slug>.{jpg,png,webp}; chưa có → /placeholder.png.
+ * Brand & Creative Work — 4 images per brand, no text, no rounded corners.
+ * Tabs switch the brand → swaps the image set. Left big image; right = 2 top + 1 wide.
+ * Images: src/assets/design/<slug>-1..4.{jpg,png,webp}; missing → /placeholder.png.
  */
 export interface Props {
 	id?: string;
@@ -19,34 +18,57 @@ const designImages = import.meta.glob<{ default: ImageMetadata }>(
 	'../../assets/design/*.{jpg,jpeg,png,webp,avif}',
 	{ eager: true },
 );
-const imageFor = (slug: string): ImageMetadata | undefined => {
+const pick = (slug: string, n: number): ImageMetadata | undefined => {
 	const match = Object.entries(designImages).find(([path]) =>
-		path.split('/').pop()?.startsWith(`${slug}.`),
+		path.split('/').pop()?.startsWith(`${slug}-${n}.`),
 	);
 	return match?.[1].default;
 };
 ---
 
-<section class="section container grid-bg" id={id} aria-labelledby={`${id}-title`}>
-	<SectionTitle id={`${id}-title`} eyebrow="creative direction · studio work">Design Showcase</SectionTitle>
+<section class="section container" id={id} aria-labelledby={`${id}-title`} data-design-tabs>
+	<div class="head">
+		<SectionTitle id={`${id}-title`} eyebrow="creative direction · studio work">Brand &amp; Creative Work</SectionTitle>
+		<p class="subtitle text-muted">Where brand meets emotion — visual identities built to stand out.</p>
+	</div>
 
-	<div class="bento">
+	<div class="tabs" role="tablist" aria-label="Brands">
 		{
-			designShowcase.map((p) => {
-				const img = imageFor(p.slug);
-				return (
-					<article class="dcard reveal" style={`--accent:${p.accent}; --col:${p.col};`}>
-						{img ? (
-							<Image src={img} alt={`${p.title} — ${p.category}`} width={1000} height={1000} format="webp" loading="lazy" />
-						) : (
-							<img src="/placeholder.png" alt="" width={1000} height={1000} loading="lazy" />
-						)}
+			brands.map((b, i) => (
+				<button class="tab" type="button" role="tab" data-tab={b.slug} aria-selected={i === 0 ? 'true' : 'false'}>
+					{b.name}
+				</button>
+			))
+		}
+	</div>
 
-						<div class="overlay">
-							<span class="cat">{p.category}</span>
-							<h3 class="title">{p.title}</h3>
+	<div class="panels">
+		{
+			brands.map((b, bi) => {
+				const imgs = [1, 2, 3, 4].map((n) => pick(b.slug, n));
+				return (
+					<div class="panel" data-panel={b.slug} hidden={bi !== 0}>
+						<div class="bento">
+							<div class="dcard big">
+								{imgs[0] ? (
+									<Image src={imgs[0]} alt={`${b.name} — 1`} width={900} height={1100} format="webp" loading="lazy" />
+								) : (
+									<img src="/placeholder.png" alt="" width={900} height={1100} loading="lazy" />
+								)}
+							</div>
+							<div class="right">
+								{[imgs[1], imgs[2], imgs[3]].map((im, i) => (
+									<div class={`dcard${i === 2 ? ' wide' : ''}`}>
+										{im ? (
+											<Image src={im} alt={`${b.name} — ${i + 2}`} width={900} height={700} format="webp" loading="lazy" />
+										) : (
+											<img src="/placeholder.png" alt="" width={900} height={700} loading="lazy" />
+										)}
+									</div>
+								))}
+							</div>
 						</div>
-					</article>
+					</div>
 				);
 			})
 		}
@@ -54,36 +76,68 @@ const imageFor = (slug: string): ImageMetadata | undefined => {
 </section>
 
 <style>
-	/* ── Asymmetrical Bento Grid — đúng 2 hàng × 4 cột (desktop) ── */
-	.bento {
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		grid-auto-rows: 13rem;
-		grid-auto-flow: dense;
-		gap: var(--space-4);
+	.head :global(.section-title) {
+		margin-bottom: var(--space-3);
 	}
-	@media (min-width: 768px) {
-		.bento {
-			grid-template-columns: repeat(4, 1fr);
-			grid-template-rows: repeat(2, 1fr);
-			grid-auto-rows: 1fr;
-			height: 34rem;
-			gap: var(--space-5);
-		}
+	.subtitle {
+		margin: 0 0 var(--space-8);
+		max-width: 32rem;
+		font-size: var(--fs-lg);
+		font-weight: var(--fw-light);
 	}
 
-	/* ── Card ── */
+	/* ── Tabs ── */
+	.tabs {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-3);
+		margin-bottom: var(--space-8);
+	}
+	.tab {
+		font: inherit;
+		font-size: var(--fs-sm);
+		padding: var(--space-2) var(--space-5);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-full);
+		background: transparent;
+		color: var(--color-text-muted);
+		cursor: pointer;
+	}
+	.tab[aria-selected='true'] {
+		border-color: var(--color-primary);
+		background: var(--color-primary);
+		color: var(--color-on-primary);
+	}
+
+	/* ── Image grid ── */
+	.panel[hidden] {
+		display: none;
+	}
+	.bento {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--space-3);
+	}
+	.right {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: var(--space-3);
+	}
+	.right .wide {
+		grid-column: span 2;
+	}
 	.dcard {
 		position: relative;
 		overflow: hidden;
-		border-radius: var(--radius-lg);
-		border: 1px solid var(--color-border-line);
-		background: var(--color-surface);
-		grid-column: span var(--col);
-		grid-row: span var(--row);
+		background: var(--color-secondary);
+		aspect-ratio: 4 / 3;
 	}
-	/* mobile: ô 2 cột = full width; giữ row span để vẫn bất đối xứng */
-
+	.dcard.big {
+		aspect-ratio: 4 / 5;
+	}
+	.dcard.wide {
+		aspect-ratio: 16 / 9;
+	}
 	.dcard :is(img) {
 		position: absolute;
 		inset: 0;
@@ -94,41 +148,34 @@ const imageFor = (slug: string): ImageMetadata | undefined => {
 		display: block;
 	}
 
-	/* gradient + text — luôn hiển thị */
-	.overlay {
-		position: absolute;
-		inset: 0;
-		z-index: 1;
-		display: flex;
-		flex-direction: column;
-		justify-content: flex-end;
-		gap: var(--space-2);
-		padding: var(--space-5);
-		background: linear-gradient(
-			to top,
-			rgba(8, 8, 11, 0.9) 0%,
-			rgba(8, 8, 11, 0.45) 38%,
-			rgba(8, 8, 11, 0) 70%
-		);
-	}
-	.cat {
-		align-self: flex-start;
-		font-family: var(--font-mono);
-		font-size: var(--fs-xs);
-		text-transform: uppercase;
-		letter-spacing: 0.16em;
-		padding: var(--space-1) var(--space-3);
-		border-radius: var(--radius-full);
-		color: var(--color-on-primary);
-		background: var(--accent);
-	}
-	.title {
-		margin: 0;
-		font-family: var(--font-display);
-		font-size: var(--fs-h3);
-		letter-spacing: 0.02em;
-		line-height: var(--lh-tight);
-		color: var(--color-text);
-		text-shadow: 0 2px 18px rgba(0, 0, 0, 0.7);
+	/* desktop: 2 cột — trái lớn full chiều cao; phải 2 hàng (trên 2 ảnh, dưới 1 ảnh) */
+	@media (min-width: 768px) {
+		.bento {
+			grid-template-columns: 1fr 1fr;
+			height: 32rem;
+		}
+		.right {
+			grid-template-rows: 1fr 1fr;
+		}
+		.dcard,
+		.dcard.big,
+		.dcard.wide {
+			aspect-ratio: auto;
+			height: 100%;
+		}
 	}
 </style>
+
+<script>
+	for (const root of document.querySelectorAll<HTMLElement>('[data-design-tabs]')) {
+		const tabs = root.querySelectorAll<HTMLButtonElement>('[data-tab]');
+		const panels = root.querySelectorAll<HTMLElement>('[data-panel]');
+		for (const tab of tabs) {
+			tab.addEventListener('click', () => {
+				const slug = tab.dataset.tab;
+				for (const t of tabs) t.setAttribute('aria-selected', String(t === tab));
+				for (const p of panels) p.hidden = p.dataset.panel !== slug;
+			});
+		}
+	}
+</script>

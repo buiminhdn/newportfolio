@@ -4,10 +4,7 @@ import type { ImageMetadata } from 'astro';
 
 const roles = ['Android Engineer', 'Product Builder', 'UI Enthusiast'];
 
-/**
- * Hero Stats — TODO: thay số liệu mẫu bằng METRIC THẬT (không bịa).
- * value = phần số, unit = ký hiệu (+ / K+ ...), label = nhãn mono.
- */
+// TODO: replace sample metrics with real numbers.
 const stats = [
 	{ value: '4', unit: '+', label: 'Years Experience' },
 	{ value: '20', unit: '+', label: 'Projects' },
@@ -15,10 +12,7 @@ const stats = [
 	{ value: '10', unit: '+', label: 'Products Shipped' },
 ];
 
-/**
- * Ảnh hero (LCP) — thả file vào src/assets/portrait.{jpg,png,webp}.
- * loading="eager" + fetchpriority="high". Chưa có ảnh → /placeholder.png.
- */
+// Hero image (LCP) — src/assets/portrait.{jpg,png,webp}; none → /placeholder.png.
 const portraitGlob = import.meta.glob<{ default: ImageMetadata }>(
 	'../../assets/portrait.{jpg,jpeg,png,webp,avif}',
 	{ eager: true },
@@ -26,9 +20,9 @@ const portraitGlob = import.meta.glob<{ default: ImageMetadata }>(
 const portrait = Object.values(portraitGlob)[0]?.default;
 ---
 
-<section class="hero grid-bg" id="top" data-parallax-root>
+<section class="hero" id="top">
 	<div class="container hero-grid">
-		<div class="hero-text reveal from-left">
+		<div class="hero-text">
 			<p class="eyebrow">portfolio · bui quang minh</p>
 			<h1 class="text-hero">Bui Quang Minh</h1>
 
@@ -42,13 +36,12 @@ const portrait = Object.values(portraitGlob)[0]?.default;
 
 			<div class="cta">
 				<a href="#contact" class="btn-primary">CONTACT ME</a>
-				<a href="#projects" class="link">VIEW WORK →</a>
+				<a href="#work" class="link">VIEW WORK →</a>
 			</div>
 		</div>
 
-		<div class="hero-media reveal from-right">
-			<div class="parallax" data-parallax="20">
-				<div class="media-frame tilt" data-tilt="10">
+		<div class="hero-media">
+			<div class="media-frame">
 				{
 					portrait ? (
 						<Image
@@ -73,19 +66,17 @@ const portrait = Object.values(portraitGlob)[0]?.default;
 						/>
 					)
 				}
-					<span class="frame-tag">ANDROID · COMPOSE · PRODUCT</span>
-				</div>
+				<span class="frame-tag">ANDROID · COMPOSE · PRODUCT</span>
 			</div>
 		</div>
 	</div>
 
 	<!-- Hero Stats -->
 	<div class="container">
-		<dl class="stats reveal">
+		<dl class="stats">
 			{
-				stats.map((s, i) => (
-					<div class="metric" style={`--i:${i}`}>
-						{/* TODO: số liệu thật */}
+				stats.map((s) => (
+					<div class="metric">
 						<dd class="value">
 							{s.value}
 							<span class="unit">{s.unit}</span>
@@ -107,10 +98,6 @@ const portrait = Object.values(portraitGlob)[0]?.default;
 		min-height: 100svh;
 		padding-block: var(--space-24) var(--space-16);
 	}
-	/* Grid nền ở hero sáng hơn một chút (chỉ riêng hero). */
-	.hero.grid-bg::before {
-		opacity: 0.62;
-	}
 	.hero-grid {
 		display: grid;
 		grid-template-columns: 1fr;
@@ -130,7 +117,7 @@ const portrait = Object.values(portraitGlob)[0]?.default;
 		list-style: none;
 		padding: 0;
 		margin: var(--space-4) 0 0;
-		font-family: var(--font-mono);
+		font-family: var(--font);
 		font-size: var(--fs-sm);
 		color: var(--color-text-subtle);
 	}
@@ -156,12 +143,11 @@ const portrait = Object.values(portraitGlob)[0]?.default;
 	.media-frame {
 		position: relative;
 		border-radius: var(--radius-md);
-		box-shadow: var(--glow-primary);
 	}
 	.portrait-img {
 		width: 100%;
 		height: auto;
-		aspect-ratio: 4 / 5;
+		aspect-ratio: 1 / 1.05;
 		object-fit: cover;
 		border-radius: var(--radius-md);
 		border: 1px solid var(--color-border-line);
@@ -170,12 +156,11 @@ const portrait = Object.values(portraitGlob)[0]?.default;
 		position: absolute;
 		left: var(--space-4);
 		bottom: var(--space-4);
-		font-family: var(--font-mono);
+		font-family: var(--font);
 		font-size: var(--fs-xs);
 		letter-spacing: 0.12em;
 		color: var(--color-text);
 		background: rgba(8, 8, 11, 0.7);
-		backdrop-filter: blur(6px);
 		border: 1px solid var(--color-border-line);
 		border-radius: var(--radius-full);
 		padding: var(--space-1) var(--space-3);
@@ -190,30 +175,6 @@ const portrait = Object.values(portraitGlob)[0]?.default;
 	.metric .value,
 	.metric .label {
 		margin: 0;
-	}
-
-	/* Tự sáng lần lượt theo --i (lặp). */
-	.stats .metric {
-		animation: stat-sweep 3.6s ease-in-out infinite;
-		animation-delay: calc(var(--i) * 0.45s);
-	}
-	.stats .metric:hover {
-		animation-play-state: paused; /* hover vẫn ưu tiên hiệu ứng hover */
-	}
-	@keyframes stat-sweep {
-		0%, 60%, 100% {
-			border-color: var(--color-border-line);
-			box-shadow: none;
-			transform: none;
-		}
-		25% {
-			border-color: var(--color-primary);
-			box-shadow: var(--glow-primary);
-			transform: translateY(-2px);
-		}
-	}
-	@media (prefers-reduced-motion: reduce) {
-		.stats .metric { animation: none; }
 	}
 
 	@media (min-width: 768px) {

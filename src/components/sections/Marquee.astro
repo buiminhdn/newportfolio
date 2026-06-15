@@ -1,8 +1,5 @@
 ---
-/**
- * Infinite tech-stack marquee — CSS thuần (xem .marquee trong design-system.css).
- * Nội dung lặp 2 lần (bản 2 aria-hidden) để cuộn liền mạch -50%.
- */
+/** Tech-stack strip — static row of keywords. */
 const stack = [
 	'Kotlin', 'Jetpack Compose', 'Coroutines', 'Flow', 'Clean Architecture',
 	'Next.js', 'React', 'React Native', 'TypeScript', 'Astro', '.NET Core',
@@ -11,16 +8,9 @@ const stack = [
 ---
 
 <section class="band" aria-label="Tech stack">
-	<div class="marquee">
-		<div class="marquee__track">
-			<ul class="row">
-				{stack.map((s) => <li>{s}</li>)}
-			</ul>
-			<ul class="row" aria-hidden="true">
-				{stack.map((s) => <li>{s}</li>)}
-			</ul>
-		</div>
-	</div>
+	<ul class="row">
+		{stack.map((s) => <li>{s}</li>)}
+	</ul>
 </section>
 
 <style>
@@ -31,21 +21,22 @@ const stack = [
 	}
 	.row {
 		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
 		align-items: center;
-		gap: var(--space-10);
+		gap: var(--space-2) var(--space-4);
 		list-style: none;
 		margin: 0;
-		padding: 0 var(--space-5) 0 0;
+		padding-inline: var(--pad-x);
 	}
 	.row li {
-		font-family: var(--font-mono);
-		font-size: var(--fs-lg);
+		font-size: var(--fs-base);
 		color: var(--color-text-muted);
 		white-space: nowrap;
 	}
-	.row li::after {
-		content: '/';
-		margin-left: var(--space-10);
+	.row li:not(:last-child)::after {
+		content: '·';
+		margin-left: var(--space-4);
 		color: var(--color-primary);
 	}
 </style>

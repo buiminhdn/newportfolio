@@ -1,31 +1,14 @@
 /**
- * Single source of truth cho tất cả project.
+ * Single source of truth cho project hiển thị ở home.
  *
  * - Trang home chỉ hiển thị project có `featured: true`, tách theo `kind`
- *   ('web-app' và 'design').
- * - Mỗi project (featured hay không) đều tự sinh 1 trang chi tiết tại
- *   /projects/<slug> từ data này (xem src/pages/projects/[slug].astro).
+ *   ('web-app' và 'design') trong section FeaturedWork.
  *
- * Ảnh preview/hero: đặt tại src/assets/projects/<slug>.{jpg,png,webp,…}
+ * Ảnh preview: đặt tại src/assets/projects/<slug>.{jpg,png,webp,…}
  * — chưa có thì fallback /placeholder.png.
- *
- * Các field detail (problem/solution/challenges/decisions/results) là optional;
- * trang chi tiết chỉ render phần nào có dữ liệu.
- * TODO: thay mọi giá trị '—' / 'TODO' bằng số liệu & nội dung THẬT.
  */
 
 export type ProjectKind = 'web-app' | 'design';
-
-export interface ProjectDecision {
-	d: string;
-	why: string;
-}
-
-export interface ProjectResult {
-	value: string;
-	unit?: string;
-	label: string;
-}
 
 export interface ProjectLink {
 	label: string;
@@ -40,19 +23,12 @@ export interface Project {
 	featured?: boolean;
 	/** Nhãn nhỏ trên card, vd "Best Product". */
 	category?: string;
-	/** Một dòng tóm tắt — dùng cho hero của trang chi tiết. */
+	/** Một dòng tóm tắt — dùng cho lead project. */
 	tagline: string;
 	/** Mô tả ngắn — dùng cho card. */
 	description: string;
 	tech?: string[];
 	links?: ProjectLink[];
-
-	// ── Nội dung trang chi tiết (optional) ──────────────────────────────
-	problem?: string;
-	solution?: string;
-	challenges?: string[];
-	decisions?: ProjectDecision[];
-	results?: ProjectResult[];
 }
 
 export const projects: Project[] = [
@@ -67,26 +43,6 @@ export const projects: Project[] = [
 		description:
 			'Cross-platform community: one .NET Core backend powering a React web app and a React Native mobile app, realtime over SignalR.',
 		tech: ['React', 'React Native', '.NET Core', 'PostgreSQL', 'Redis', 'SignalR', 'AWS', 'GitHub Actions'],
-		problem:
-			'A growing community needed a single place to connect across web and mobile — realtime conversations, reliable delivery, and an operations setup the small team could actually maintain.',
-		solution:
-			'A cross-platform system sharing one .NET Core backend across a React web app and a React Native mobile app, with realtime messaging over SignalR, Redis-backed fan-out, and an automated build/monitor pipeline.',
-		challenges: [
-			'Keeping realtime delivery consistent across web and mobile clients.',
-			'Scaling message fan-out without overloading the database.',
-			'Shipping safely with a small team — no room for manual, error-prone releases.',
-		],
-		decisions: [
-			{ d: 'SignalR + Redis backplane', why: 'Reliable realtime fan-out that scales horizontally.' },
-			{ d: 'Shared .NET Core API', why: 'One source of truth for web & mobile, less duplicated logic.' },
-			{ d: 'CI/CD + monitoring (GitHub Actions, Grafana)', why: 'Safe, repeatable releases and early problem detection.' },
-		],
-		results: [
-			{ value: '—', label: 'Active Users' },
-			{ value: '—', label: 'Messages / day' },
-			{ value: '—', label: 'Uptime' },
-			{ value: '—', label: 'Crash-free rate' },
-		],
 	},
 	{
 		slug: 'hango',
@@ -184,6 +140,3 @@ export const projects: Project[] = [
 
 export const featuredByKind = (kind: ProjectKind): Project[] =>
 	projects.filter((p) => p.kind === kind && p.featured);
-
-export const projectBySlug = (slug: string): Project | undefined =>
-	projects.find((p) => p.slug === slug);

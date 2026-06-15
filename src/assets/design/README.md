@@ -1,23 +1,19 @@
-# Ảnh Design Showcase
+# Ảnh Brand & Creative Work
 
-Ảnh cho section **Design Showcase** (masonry) — đặt tên theo `slug` trong
-`src/data/designShowcase.ts`. Mỗi project dùng tối đa 5 ảnh:
+Mỗi brand 1 bộ **4 ảnh** cho bento. Đặt tên theo `slug` brand (trong
+`src/data/designShowcase.ts`) + số thứ tự ô:
 
-| File | Vai trò |
+| File | Vị trí trong bento |
 | --- | --- |
-| `<slug>.jpg` | **After** — thành phẩm (ảnh chính của card) |
-| `<slug>-before.jpg` | **Before** — bản gốc/nháp (hiện khi hover wipe) |
-| `<slug>-p1.jpg` … `-p3.jpg` | **Process snippets** — ảnh quá trình (3 ô nhỏ) |
+| `<slug>-1.jpg` | Ảnh LỚN (cột trái) |
+| `<slug>-2.jpg` | Phải · trên-trái |
+| `<slug>-3.jpg` | Phải · trên-phải |
+| `<slug>-4.jpg` | Phải · dưới (rộng) |
 
-Ví dụ cho `lumiere-atelier`:
+Ví dụ cho brand `lumiere`:
 
-- `lumiere-atelier.jpg`
-- `lumiere-atelier-before.jpg`
-- `lumiere-atelier-p1.jpg`, `-p2.jpg`, `-p3.jpg`
+- `lumiere-1.jpg`, `lumiere-2.jpg`, `lumiere-3.jpg`, `lumiere-4.jpg`
 
-Định dạng: jpg / jpeg / png / webp / avif (Astro tự tối ưu WebP + lazy-load).
-**Chưa có ảnh** → card tự hiển thị gradient theo `accent` của project (vẫn đúng
-tông dark luxury), nên bạn có thể điền nội dung trước, thêm ảnh sau.
-
-Tỉ lệ card (chiều cao masonry) điều khiển bằng field `ratio` trong data, không phụ
-thuộc kích thước ảnh — ảnh sẽ `object-fit: cover` theo khung.
+Thêm/sửa brand trong `src/data/designShowcase.ts` (`brands`), tab chọn brand tự
+sinh theo data. Định dạng: jpg / jpeg / png / webp / avif (Astro tự tối ưu WebP).
+Thiếu ảnh nào → ô đó hiện `/placeholder.png`.

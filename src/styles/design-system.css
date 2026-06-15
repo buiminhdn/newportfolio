@@ -1,51 +1,31 @@
 /* ==========================================================================
-   Design System — Bui Quang Minh Portfolio
-   HTML/CSS thuần. Trích xuất từ design hiện tại (React + Tailwind v4).
-   Cách dùng:  <link rel="stylesheet" href="design-system.css">
+   Design System — Bui Quang Minh Portfolio (HTML/CSS thuần)
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   1. FONTS
-   --------------------------------------------------------------------------
-   KHÔNG dùng @import ở đây — gây render-blocking, hỏng LCP/Core Web Vitals.
-   Nạp font ở <head> của Astro layout (xem design-system.astro.md), ưu tiên:
-   (a) self-host qua @fontsource — nhanh & SEO tốt nhất, hoặc
-   (b) <link preconnect> + <link> Google Fonts với chỉ weight đang dùng.
-   Weight thực dùng: Bebas Neue 400 · Poppins 200,300,400,500,600.
-   -------------------------------------------------------------------------- */
-
-/* --------------------------------------------------------------------------
-   2. DESIGN TOKENS  (CSS Custom Properties)
+   1. DESIGN TOKENS
    -------------------------------------------------------------------------- */
 :root {
-  /* ---- Color — Futuristic Dashboard × Neo Brutalism ----
-     MỘT màu duy nhất: lime #D1EB77 (primary = accent). Phần còn lại là nền tối + trắng. */
-  --color-primary:        #d1eb77;  /* accent duy nhất của toàn site */
+  /* Color — one accent (lime) on a dark base. */
+  --color-primary:        #d1eb77;
   --color-primary-hover:  #c2e055;
-  --color-accent:         #d1eb77;  /* = primary (giữ cùng 1 màu) */
-  --color-secondary:      #17171f;  /* nền card / icon */
-  --color-bg:             #08080b;  /* nền trang (near-black, hơi lạnh) */
-  --color-surface:        #101015;  /* nền nổi nhẹ */
-  --color-on-primary:     #08080b;  /* chữ tối trên nền cyan (đủ tương phản) */
+  --color-accent:         #d1eb77;
+  --color-secondary:      #17171f;  /* card / icon background */
+  --color-bg:             #08080b;  /* page background */
+  --color-surface:        #101015;  /* raised surface */
+  --color-on-primary:     #08080b;  /* text on accent */
   --color-black:          #000000;
 
-  --color-text:           #f5f5f7;  /* chữ chính */
-  --color-text-muted:     #a1a1aa;  /* zinc-400 — mô tả phụ */
-  --color-text-subtle:    #d4d4d8;  /* zinc-300 — chip text */
+  --color-text:           #f5f5f7;
+  --color-text-muted:     #a1a1aa;
+  --color-text-subtle:    #d4d4d8;
 
-  --color-border:         #52525b;  /* zinc-600 — viền chip/pill */
-  --color-border-soft:    #34343f;  /* divider */
-  --color-border-line:    #26262e;  /* đường kẻ / grid */
+  --color-border:         #52525b;
+  --color-border-soft:    #34343f;
+  --color-border-line:    #26262e;
 
-  /* Glow & brutalist surfaces — đều dùng lime */
-  --glow-primary:  0 0 40px rgba(209, 235, 119, 0.35);
-  --glow-accent:   0 0 32px rgba(209, 235, 119, 0.30);
-  --brutal-shadow: 6px 6px 0 var(--color-primary);
-
-  /* ---- Typography ---- */
-  --font-display: "Bebas Neue", sans-serif;  /* tiêu đề, in hoa */
-  --font-body:    "Poppins", sans-serif;     /* body */
-  --font-mono:    ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace; /* data label, 0 KB */
+  /* Typography — single font. */
+  --font: "Poppins", system-ui, -apple-system, sans-serif;
 
   --fw-extralight: 200;
   --fw-light:      300;
@@ -53,13 +33,12 @@
   --fw-medium:     500;
   --fw-semibold:   600;
 
-  /* Type scale (clamp = responsive mượt theo viewport) */
-  --fs-hero:     clamp(3rem, 8vw, 6rem);      /* text-5xl → 8xl */
-  --fs-section:  clamp(3rem, 6vw, 4.5rem);    /* text-5xl → 7xl */
-  --fs-h2:       clamp(1.75rem, 3vw, 2.25rem);/* sub-heading */
-  --fs-h3:       1.5rem;                       /* tên item */
-  --fs-stat:     clamp(2.5rem, 5vw, 4rem);     /* số liệu lớn (metric) */
-  --fs-lg:       1.125rem;                     /* body lớn */
+  --fs-hero:     clamp(2.25rem, 5vw, 3.5rem);
+  --fs-section:  clamp(1.75rem, 3.5vw, 2.5rem);
+  --fs-h2:       clamp(1.375rem, 2vw, 1.625rem);
+  --fs-h3:       1.1875rem;
+  --fs-stat:     clamp(1.75rem, 3.5vw, 2.5rem);
+  --fs-lg:       1.0625rem;
   --fs-base:     1rem;
   --fs-sm:       0.875rem;
   --fs-xs:       0.75rem;
@@ -67,7 +46,7 @@
   --lh-tight:    1.1;
   --lh-normal:   1.6;
 
-  /* ---- Spacing scale (rem) ---- */
+  /* Spacing scale (rem) */
   --space-1:  0.25rem;
   --space-2:  0.5rem;
   --space-3:  0.75rem;
@@ -81,41 +60,29 @@
   --space-24: 6rem;
   --space-32: 8rem;
 
-  /* Padding ngang container (px-6 sm:px-16) */
   --pad-x: var(--space-6);
 
-  /* ---- Radius ---- */
-  --radius-md:   0.75rem;  /* rounded-xl  — card, ảnh hero */
-  --radius-lg:   1rem;     /* rounded-2xl — ảnh grid */
-  --radius-full: 9999px;   /* pill, nút, chip */
+  --radius-md:   0.75rem;
+  --radius-lg:   1rem;
+  --radius-full: 9999px;
 
-  /* ---- Layout ---- */
   --container-max: 1280px;
 
-  /* ---- Shadow ---- */
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
-
-  /* ---- Motion ---- */
-  --dur-fast:   0.3s;
-  --dur-base:   0.6s;
-  --dur-slow:   0.8s;
-  --ease-out:   cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @media (min-width: 640px) {
-  :root { --pad-x: var(--space-16); }  /* sm:px-16 */
+  :root { --pad-x: var(--space-16); }
 }
 
 /* --------------------------------------------------------------------------
-   3. RESET / BASE
+   2. RESET / BASE
    -------------------------------------------------------------------------- */
 *, *::before, *::after { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
-
 body {
   margin: 0;
-  font-family: var(--font-body);
+  font-family: var(--font);
   font-weight: var(--fw-regular);
   color: var(--color-text);
   background-color: var(--color-bg);
@@ -127,16 +94,17 @@ img { display: block; max-width: 100%; }
 a   { color: inherit; text-decoration: none; }
 
 /* --------------------------------------------------------------------------
-   4. TYPOGRAPHY UTILITIES
+   3. TYPOGRAPHY UTILITIES
    -------------------------------------------------------------------------- */
-.display      { font-family: var(--font-display); text-transform: uppercase; line-height: var(--lh-tight); }
-.text-hero    { font-family: var(--font-display); text-transform: uppercase; font-size: var(--fs-hero);    line-height: var(--lh-tight); }
-.text-section { font-family: var(--font-display); text-transform: uppercase; font-size: var(--fs-section); line-height: var(--lh-tight); }
+.display      { font-family: var(--font); text-transform: uppercase; line-height: var(--lh-tight); }
+.text-hero    { font-family: var(--font); text-transform: uppercase; font-size: var(--fs-hero);    line-height: var(--lh-tight); }
+.text-section { font-family: var(--font); text-transform: uppercase; font-size: var(--fs-section); line-height: var(--lh-tight); }
 .text-h2      { font-size: var(--fs-h2); font-weight: var(--fw-regular); }
 .text-h3      { font-size: var(--fs-h3); font-weight: var(--fw-semibold); }
 
 .text-muted   { color: var(--color-text-muted); }
 .text-primary { color: var(--color-primary); }
+.text-accent  { color: var(--color-accent); }
 
 .fw-extralight { font-weight: var(--fw-extralight); }
 .fw-light      { font-weight: var(--fw-light); }
@@ -145,7 +113,7 @@ a   { color: inherit; text-decoration: none; }
 .lead { font-weight: var(--fw-extralight); font-size: var(--fs-lg); }
 
 /* --------------------------------------------------------------------------
-   5. LAYOUT
+   4. LAYOUT
    -------------------------------------------------------------------------- */
 .container {
   padding-inline: var(--pad-x);
@@ -155,7 +123,6 @@ a   { color: inherit; text-decoration: none; }
 
 .section { margin-top: var(--space-32); }
 
-/* Grid 2 cột: gộp 1 cột < 1280px */
 .grid-2 {
   display: grid;
   grid-template-columns: 1fr;
@@ -163,10 +130,8 @@ a   { color: inherit; text-decoration: none; }
   align-items: center;
 }
 
-/* Lưới ảnh */
 .grid-cards   { display: grid; grid-template-columns: 1fr; gap: var(--space-10); }
 
-/* Title trái / content phải */
 .split {
   display: flex;
   flex-direction: column;
@@ -191,10 +156,10 @@ a   { color: inherit; text-decoration: none; }
 }
 
 /* --------------------------------------------------------------------------
-   6. COMPONENTS
+   5. COMPONENTS
    -------------------------------------------------------------------------- */
 
-/* 6.1 Primary Button — kiểu "dấu chấm" lệch góc */
+/* 5.1 Primary Button */
 .btn-primary {
   position: relative;
   display: inline-flex;
@@ -207,22 +172,21 @@ a   { color: inherit; text-decoration: none; }
   border-radius: var(--radius-full);
   border: none;
   cursor: pointer;
-  transition: transform var(--dur-fast), background var(--dur-fast);
 }
 .btn-primary::after {
   content: "";
   position: absolute;
   top: 50%;
   right: 1.5rem;
-  transform: translateY(-50%);
+  margin-top: -0.275rem;
   width: 0.55rem;
   height: 0.55rem;
   border-radius: var(--radius-full);
   background: currentColor;
 }
-.btn-primary:hover { background: var(--color-primary-hover); transform: scale(1.05); }
+.btn-primary:hover { background: var(--color-primary-hover); }
 
-/* 6.2 Outline Button */
+/* 5.2 Outline Button */
 .btn-outline {
   display: inline-flex;
   align-items: center;
@@ -233,11 +197,10 @@ a   { color: inherit; text-decoration: none; }
   border-radius: var(--radius-full);
   white-space: nowrap;
   cursor: pointer;
-  transition: transform var(--dur-fast);
 }
-.btn-outline:hover { transform: scale(1.05); }
+.btn-outline:hover { background: var(--color-primary); color: var(--color-on-primary); }
 
-/* 6.3 Floating button (back to top) */
+/* 5.3 Floating button (back to top) */
 .btn-float {
   position: fixed;
   bottom: var(--space-6);
@@ -252,11 +215,10 @@ a   { color: inherit; text-decoration: none; }
   border-radius: var(--radius-full);
   box-shadow: var(--shadow-md);
   cursor: pointer;
-  transition: transform var(--dur-fast);
 }
-.btn-float:hover { transform: scale(1.1); }
+.btn-float:hover { background: var(--color-primary-hover); }
 
-/* 6.4 Chip / Tag */
+/* 5.4 Chip / Tag */
 .chip {
   display: inline-block;
   font-size: var(--fs-sm);
@@ -266,7 +228,7 @@ a   { color: inherit; text-decoration: none; }
   padding: var(--space-1) var(--space-3);
 }
 
-/* 6.5 Skill Pill (lớn hơn chip) */
+/* 5.5 Skill Pill */
 .pill {
   display: inline-block;
   border: 1px solid var(--color-border);
@@ -274,7 +236,7 @@ a   { color: inherit; text-decoration: none; }
   padding: var(--space-3) var(--space-8);
 }
 
-/* 6.6 Badge (góc ảnh) */
+/* 5.6 Badge */
 .badge {
   position: absolute;
   top: var(--space-4);
@@ -286,22 +248,22 @@ a   { color: inherit; text-decoration: none; }
   padding: var(--space-2) var(--space-4);
 }
 
-/* 6.7 Contact pill (viền primary) */
+/* 5.7 Contact pill */
 .pill-contact {
   display: inline-block;
   border: 1px solid var(--color-primary);
   border-radius: var(--radius-full);
   padding: 0.375rem var(--space-5);
 }
+.pill-contact:hover { background: var(--color-primary); color: var(--color-on-primary); }
 
-/* 6.8 Text link */
+/* 5.8 Text link */
 .link {
   color: var(--color-primary);
-  transition: opacity var(--dur-fast);
 }
 .link:hover { text-decoration: underline; }
 
-/* 6.9 Social icon */
+/* 5.9 Social icon */
 .social {
   width: 3.5rem;
   height: 3.5rem;
@@ -310,12 +272,11 @@ a   { color: inherit; text-decoration: none; }
   justify-content: center;
   background: var(--color-secondary);
   border-radius: var(--radius-full);
-  transition: opacity var(--dur-fast);
 }
 .social:hover { opacity: 0.8; }
 .social img { width: 2rem; height: 2rem; object-fit: contain; }
 
-/* 6.10 Card / Project image block */
+/* 5.10 Card / Project image block */
 .card {
   position: relative;
   background: var(--color-secondary);
@@ -324,7 +285,7 @@ a   { color: inherit; text-decoration: none; }
 }
 .card > img { width: 100%; height: 20rem; object-fit: cover; border-radius: var(--radius-lg); }
 
-/* 6.11 Info row (Tech Stack / Highlight) */
+/* 5.11 Info row */
 .info-row {
   display: flex;
   align-items: flex-start;
@@ -337,7 +298,7 @@ a   { color: inherit; text-decoration: none; }
 .info-row .label { flex: none; width: 13rem; font-weight: var(--fw-light); font-size: var(--fs-sm); }
 .info-row .values { display: flex; flex-wrap: wrap; gap: var(--space-2); justify-content: flex-end; }
 
-/* 6.12 Ảnh grid item */
+/* 5.12 Media grid item */
 .media {
   width: 100%;
   height: 24rem;
@@ -347,78 +308,27 @@ a   { color: inherit; text-decoration: none; }
 .media-sm { height: 15rem; }
 
 /* --------------------------------------------------------------------------
-   7. MOTION  (reveal khi scroll — thêm class .reveal, JS gắn .is-visible)
+   6. DATA LABELS & METRICS
    -------------------------------------------------------------------------- */
-.reveal {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity var(--dur-base) var(--ease-out),
-              transform var(--dur-base) var(--ease-out);
-}
-.reveal.from-left  { transform: translateX(-40px); }
-.reveal.from-right { transform: translateX(40px); }
-.reveal.is-visible { opacity: 1; transform: none; }
 
-/* Stagger: đặt --i (chỉ số) trên item để xếp tầng delay */
-.reveal[style*="--i"] { transition-delay: calc(var(--i) * 0.08s); }
-
-@media (prefers-reduced-motion: reduce) {
-  .reveal { opacity: 1; transform: none; transition: none; }
-  html { scroll-behavior: auto; }
-}
-
-/* ==========================================================================
-   8. FUTURISTIC DASHBOARD × NEO BRUTALISM  (vanilla, 0 KB JS)
-   ========================================================================== */
-
-/* 8.1 Eyebrow / data label — mono, in hoa, có dấu chấm dẫn */
+/* 6.1 Eyebrow — small uppercase label */
 .eyebrow {
-  font-family: var(--font-mono);
+  font-family: var(--font);
   font-size: var(--fs-xs);
   text-transform: uppercase;
   letter-spacing: 0.18em;
-  color: var(--color-accent);
-}
-.eyebrow::before { content: "// "; opacity: 0.7; }
-
-/* 8.2 Glow helpers */
-.glow        { box-shadow: var(--glow-primary); }
-.glow-accent { box-shadow: var(--glow-accent); }
-.text-accent { color: var(--color-accent); }
-.text-glow   { text-shadow: 0 0 24px rgba(209, 235, 119, 0.55); }
-
-/* 8.3 Technical grid background — đặt trong phần tử position:relative
-   Dùng ::before phủ kín, fade theo radial mask. Không ảnh, 0 request. */
-.grid-bg { position: relative; isolation: isolate; }
-.grid-bg::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background-image:
-    linear-gradient(var(--color-border-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--color-border-line) 1px, transparent 1px);
-  background-size: 56px 56px;
-  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 80%);
-          mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 80%);
-  opacity: 0.5;
+  color: var(--color-text-muted);
 }
 
-/* 8.4 Metric card — số liệu lớn + nhãn mono. (slot data → đặt TODO ở markup) */
+/* 6.2 Metric card — large number + label */
 .metric {
   border: 1px solid var(--color-border-line);
   border-radius: var(--radius-md);
   background: var(--color-surface);
   padding: var(--space-6);
-  transition: border-color var(--dur-fast), box-shadow var(--dur-fast), transform var(--dur-fast);
-}
-.metric:hover {
-  border-color: var(--color-primary);
-  box-shadow: var(--glow-primary);
-  transform: translateY(-2px);
 }
 .metric .value {
-  font-family: var(--font-display);
+  font-family: var(--font);
   font-size: var(--fs-stat);
   line-height: 1;
   color: var(--color-text);
@@ -426,57 +336,9 @@ a   { color: inherit; text-decoration: none; }
 .metric .value .unit { color: var(--color-primary); }
 .metric .label {
   margin-top: var(--space-2);
-  font-family: var(--font-mono);
+  font-family: var(--font);
   font-size: var(--fs-xs);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--color-text-muted);
-}
-
-/* 8.5 Brutalist surface — viền cứng + đổ bóng offset đặc */
-.brutal {
-  border: 2px solid var(--color-text);
-  border-radius: var(--radius-md);
-  background: var(--color-secondary);
-  box-shadow: var(--brutal-shadow);
-  transition: transform var(--dur-fast), box-shadow var(--dur-fast);
-}
-.brutal:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 9px 9px 0 var(--color-primary);
-}
-
-/* 8.6 Infinite marquee — chạy ngang vô hạn (CSS thuần).
-   Markup: .marquee > .marquee__track > (nội dung) + (bản sao aria-hidden). */
-.marquee {
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-          mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-}
-.marquee__track {
-  display: flex;
-  width: max-content;
-  gap: var(--space-10);
-  animation: marquee var(--marquee-dur, 28s) linear infinite;
-}
-.marquee:hover .marquee__track { animation-play-state: paused; }
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-
-/* 8.7 Tilt — JS gắn biến --rx/--ry (deg) theo chuột; CSS lo phần render */
-.tilt {
-  transform: perspective(800px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
-  transform-style: preserve-3d;
-  transition: transform var(--dur-fast) var(--ease-out);
-  will-change: transform;
-}
-
-/* 8.8 Parallax layer — JS set --px/--py (px) theo chuột */
-.parallax { transform: translate3d(var(--px, 0), var(--py, 0), 0); transition: transform 0.15s linear; }
-
-@media (prefers-reduced-motion: reduce) {
-  .marquee__track { animation: none; }
-  .tilt, .parallax { transform: none; }
 }

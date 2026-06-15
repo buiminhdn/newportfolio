@@ -46,11 +46,11 @@ const supportCards = [
 ];
 ---
 
-<section class="section container skills-showcase" id="skills" aria-labelledby="skills-title" data-parallax-root>
+<section class="section container skills-showcase" id="skills" aria-labelledby="skills-title">
 	<SectionTitle id="skills-title" eyebrow="what i build best">Skills</SectionTitle>
 
 	<div class="skills-bento">
-		<article class="android-card reveal">
+		<article class="android-card">
 			<div class="android-copy">
 				<p class="eyebrow">Primary expertise</p>
 				<h3>Android Engineering</h3>
@@ -62,10 +62,10 @@ const supportCards = [
 
 			<dl class="impact-grid" aria-label="Android impact metrics">
 				{
-					androidMetrics.map((metric, i) => (
-						<div class="impact" style={`--i:${i}`}>
+					androidMetrics.map((metric) => (
+						<div class="impact">
 							<dd>
-								<span class="count" data-count={metric.value} data-suffix={metric.suffix}>0</span>
+								<span class="count">{metric.value}<span class="suffix">{metric.suffix}</span></span>
 							</dd>
 							<dt>{metric.label}</dt>
 						</div>
@@ -90,8 +90,8 @@ const supportCards = [
 
 		<div class="support-grid">
 			{
-				supportCards.map((card, i) => (
-					<article class="support-card reveal" style={`--i:${i + 1}`}>
+				supportCards.map((card) => (
+					<article class="support-card">
 						<p class="support-kicker">{card.kicker}</p>
 						<h3>{card.title}</h3>
 						<p>{card.body}</p>
@@ -118,43 +118,15 @@ const supportCards = [
 		overflow: hidden;
 		border: 1px solid var(--color-border-line);
 		border-radius: 8px;
-		background:
-			linear-gradient(135deg, rgba(209, 235, 119, 0.12), transparent 34%),
-			linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.01)),
-			var(--color-surface);
-		transition:
-			transform var(--dur-fast) var(--ease-out),
-			border-color var(--dur-fast) var(--ease-out),
-			box-shadow var(--dur-fast) var(--ease-out);
-	}
-	.android-card:hover,
-	.support-card:hover {
-		transform: translateY(-6px);
-		border-color: color-mix(in srgb, var(--color-primary) 72%, var(--color-border-line));
-		box-shadow: var(--glow-primary), 0 28px 80px rgba(0, 0, 0, 0.48);
+		background: var(--color-surface);
 	}
 	.android-card {
-		min-height: 44rem;
+		min-height: 32rem;
 		padding: clamp(var(--space-8), 5vw, var(--space-16));
 		display: grid;
 		grid-template-rows: auto auto 1fr;
 		gap: var(--space-10);
 		border-color: color-mix(in srgb, var(--color-primary) 72%, var(--color-border-line));
-		isolation: isolate;
-	}
-	.android-card::before {
-		content: '';
-		position: absolute;
-		inset: 1px;
-		z-index: -1;
-		background-image:
-			linear-gradient(rgba(209, 235, 119, 0.08) 1px, transparent 1px),
-			linear-gradient(90deg, rgba(209, 235, 119, 0.08) 1px, transparent 1px);
-		background-size: 42px 42px;
-		background-position: 0 0;
-		mask-image: radial-gradient(circle at 72% 16%, #000 0 24%, transparent 58%);
-		opacity: 0.8;
-		animation: skillGridDrift 18s linear infinite;
 	}
 	.android-copy {
 		max-width: 46rem;
@@ -164,9 +136,9 @@ const supportCards = [
 	}
 	.android-copy h3 {
 		margin: 0;
-		font-family: var(--font-display);
-		font-size: clamp(4rem, 9vw, 8rem);
-		line-height: 0.9;
+		font-family: var(--font);
+		font-size: clamp(1.75rem, 4vw, 2.75rem);
+		line-height: 1;
 		text-transform: uppercase;
 		letter-spacing: 0;
 	}
@@ -174,7 +146,7 @@ const supportCards = [
 		max-width: 38rem;
 		margin: var(--space-6) 0 0;
 		color: var(--color-text-subtle);
-		font-size: clamp(1rem, 1.4vw, 1.25rem);
+		font-size: var(--fs-lg);
 		font-weight: var(--fw-light);
 		line-height: 1.55;
 	}
@@ -193,22 +165,21 @@ const supportCards = [
 		margin: 0;
 	}
 	.impact dd {
-		font-family: var(--font-display);
-		font-size: clamp(2.6rem, 5vw, 4.8rem);
-		line-height: 0.9;
+		font-family: var(--font);
+		font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+		line-height: 1;
 		color: var(--color-text);
 	}
 	.impact dt {
 		margin-top: var(--space-2);
 		max-width: 8.5rem;
-		font-family: var(--font-mono);
+		font-family: var(--font);
 		font-size: var(--fs-xs);
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
 		color: var(--color-text-muted);
 	}
-	.count::after {
-		content: attr(data-suffix);
+	.count .suffix {
 		color: var(--color-primary);
 	}
 	.stack-panel {
@@ -218,7 +189,7 @@ const supportCards = [
 	}
 	.stack-title {
 		margin: 0 0 var(--space-5);
-		font-family: var(--font-mono);
+		font-family: var(--font);
 		font-size: var(--fs-xs);
 		text-transform: uppercase;
 		letter-spacing: 0.14em;
@@ -271,7 +242,7 @@ const supportCards = [
 	}
 	.support-kicker {
 		margin: 0;
-		font-family: var(--font-mono);
+		font-family: var(--font);
 		font-size: var(--fs-xs);
 		text-transform: uppercase;
 		letter-spacing: 0.14em;
@@ -279,9 +250,9 @@ const supportCards = [
 	}
 	.support-card h3 {
 		margin: var(--space-5) 0 var(--space-3);
-		font-family: var(--font-display);
-		font-size: clamp(2rem, 3vw, 3.2rem);
-		line-height: 0.95;
+		font-family: var(--font);
+		font-size: clamp(1.375rem, 2.2vw, 1.75rem);
+		line-height: 1.1;
 		text-transform: uppercase;
 		letter-spacing: 0;
 	}
@@ -296,7 +267,7 @@ const supportCards = [
 		margin-top: var(--space-6);
 		padding-top: var(--space-4);
 		border-top: 1px solid var(--color-border-line);
-		font-family: var(--font-mono);
+		font-family: var(--font);
 		font-size: var(--fs-xs);
 		color: var(--color-text-subtle);
 	}
@@ -317,69 +288,10 @@ const supportCards = [
 			align-items: stretch;
 		}
 		.android-card {
-			min-height: 50rem;
+			min-height: 40rem;
 		}
 		.support-grid {
 			grid-template-columns: 1fr;
 		}
 	}
-	@media (prefers-reduced-motion: reduce) {
-		.android-card:hover,
-		.support-card:hover {
-			transform: none;
-		}
-		.android-card::before {
-			animation: none;
-		}
-	}
-	@keyframes skillGridDrift {
-		from {
-			background-position: 0 0;
-		}
-		to {
-			background-position: 84px 42px;
-		}
-	}
 </style>
-
-<script>
-	const section = document.querySelector<HTMLElement>('.skills-showcase');
-	const counters = section?.querySelectorAll<HTMLElement>('[data-count]');
-
-	if (section && counters?.length) {
-		const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-		const formatCounter = (el: HTMLElement, value: number) => {
-			el.textContent = String(value);
-		};
-
-		const animateCounters = () => {
-			counters.forEach((el) => {
-				const target = Number(el.dataset.count) || 0;
-				if (reduce) {
-					formatCounter(el, target);
-					return;
-				}
-
-				const duration = 1100;
-				const start = performance.now();
-				const tick = (now: number) => {
-					const progress = Math.min(1, (now - start) / duration);
-					const eased = 1 - Math.pow(1 - progress, 3);
-					formatCounter(el, Math.round(target * eased));
-					if (progress < 1) requestAnimationFrame(tick);
-				};
-				requestAnimationFrame(tick);
-			});
-		};
-
-		const io = new IntersectionObserver(
-			(entries, observer) => {
-				if (!entries.some((entry) => entry.isIntersecting)) return;
-				animateCounters();
-				observer.disconnect();
-			},
-			{ threshold: 0.35 },
-		);
-		io.observe(section);
-	}
-</script>

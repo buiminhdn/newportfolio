@@ -1,10 +1,7 @@
 ---
 import SectionTitle from '../SectionTitle.astro';
 
-/**
- * Experience — vertical timeline. Mỗi mốc nêu ACHIEVEMENTS, không chỉ mô tả.
- * Achievements có số liệu → TODO (không bịa).
- */
+/** Experience — vertical timeline. Achievements with metrics are TODO. */
 const jobs = [
 	{
 		role: 'Android Developer',
@@ -39,20 +36,25 @@ const jobs = [
 ---
 
 <section class="section container" id="experience" aria-labelledby="exp-title">
-	<SectionTitle id="exp-title" eyebrow="track record">Experience</SectionTitle>
+	<SectionTitle id="exp-title" eyebrow="always shipping">Activity</SectionTitle>
 
-	<ol class="timeline">
+	<ol class="ledger">
 		{
 			jobs.map((j, i) => (
-				<li class="node reveal" style={`--i:${i}`}>
-					<span class="period eyebrow">{j.period}</span>
-					<h3 class="text-h3">{j.role}</h3>
-					<p class="org text-accent">{j.org}</p>
-					<ul class="points">
-						{j.points.map((p) => (
-							<li class="text-muted fw-extralight">{p}</li>
-						))}
-					</ul>
+				<li class="row">
+					<div class="meta">
+						<span class="idx">{String(i + 1).padStart(2, '0')}</span>
+						<span class="period">{j.period}</span>
+					</div>
+					<div class="detail">
+						<h3 class="role">{j.role}</h3>
+						<p class="org text-accent">{j.org}</p>
+						<ul class="points">
+							{j.points.map((p) => (
+								<li class="text-muted fw-extralight">{p}</li>
+							))}
+						</ul>
+					</div>
 				</li>
 			))
 		}
@@ -60,39 +62,46 @@ const jobs = [
 </section>
 
 <style>
-	.timeline {
+	.ledger {
 		list-style: none;
 		margin: 0;
 		padding: 0;
+	}
+	.row {
 		display: grid;
-		gap: var(--space-12);
+		grid-template-columns: 1fr;
+		gap: var(--space-4);
+		padding-block: var(--space-8);
+		border-top: 1px solid var(--color-border-line);
 	}
-	.node {
-		position: relative;
-		padding-left: var(--space-10);
-		border-left: 2px solid var(--color-border-line);
+	.row:last-child {
+		border-bottom: 1px solid var(--color-border-line);
 	}
-	.node::before {
-		content: '';
-		position: absolute;
-		left: -0.5rem;
-		top: 0.2rem;
-		width: 0.9rem;
-		height: 0.9rem;
-		border-radius: var(--radius-full);
-		background: var(--color-primary);
-		box-shadow: var(--glow-primary);
+	.meta {
+		display: flex;
+		align-items: baseline;
+		gap: var(--space-4);
+	}
+	.idx {
+		font-size: var(--fs-h3);
+		line-height: 1;
+		color: var(--color-primary);
+		font-variant-numeric: tabular-nums;
 	}
 	.period {
-		display: block;
-		margin-bottom: var(--space-2);
+		font-size: var(--fs-xs);
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		color: var(--color-text-muted);
 	}
-	.node h3 {
+	.role {
 		margin: 0;
+		font-size: var(--fs-h2);
+		font-weight: var(--fw-medium);
+		line-height: 1.15;
 	}
 	.org {
-		margin: var(--space-1) 0 var(--space-4);
-		font-family: var(--font-mono);
+		margin: var(--space-1) 0 var(--space-5);
 		font-size: var(--fs-sm);
 	}
 	.points {
@@ -113,5 +122,16 @@ const jobs = [
 		position: absolute;
 		left: 0;
 		color: var(--color-accent);
+	}
+
+	@media (min-width: 768px) {
+		.row {
+			grid-template-columns: 15rem 1fr;
+			gap: var(--space-10);
+		}
+		.meta {
+			flex-direction: column;
+			gap: var(--space-2);
+		}
 	}
 </style>
