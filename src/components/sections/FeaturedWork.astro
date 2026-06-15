@@ -1,0 +1,68 @@
+---
+import type { ImageMetadata } from 'astro';
+import SectionTitle from '../SectionTitle.astro';
+import ProjectCard from '../ProjectCard.astro';
+import { featuredByKind, type ProjectKind } from '../../data/projects';
+
+/**
+ * Section "Featured" cho 1 nhóm project (web-app | design).
+ * Chỉ render project có featured: true thuộc đúng `kind` — chi tiết ở trang riêng.
+ */
+export interface Props {
+	id: string;
+	kind: ProjectKind;
+	eyebrow?: string;
+	title: string;
+}
+const { id, kind, eyebrow, title } = Astro.props;
+const items = featuredByKind(kind);
+
+const projectImages = import.meta.glob<{ default: ImageMetadata }>(
+	'../../assets/projects/*.{jpg,jpeg,png,webp,avif}',
+	{ eager: true },
+);
+const imageFor = (slug: string): ImageMetadata | undefined => {
+	const match = Object.entries(projectImages).find(([path]) =>
+		path.split('/').pop()?.startsWith(`${slug}.`),
+	);
+	return match?.[1].default;
+};
+---
+
+<section class="section container" id={id} aria-labelledby={`${id}-title`}>
+	<SectionTitle id={`${id}-title`} eyebrow={eyebrow}>{title}</SectionTitle>
+
+	<div class="gallery">
+		{
+			items.map((p, i) => (
+				<ProjectCard
+					slug={p.slug}
+					name={p.name}
+					category={p.category}
+					description={p.description}
+					tech={p.tech}
+					image={imageFor(p.slug)}
+					index={i}
+				/>
+			))
+		}
+	</div>
+</section>
+
+<style>
+	.gallery {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--space-8);
+	}
+	@media (min-width: 640px) {
+		.gallery {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+	@media (min-width: 1024px) {
+		.gallery {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+</style>

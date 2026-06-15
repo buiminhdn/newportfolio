@@ -5,69 +5,52 @@ import Chip from './Chip.astro';
 
 /**
  * Gallery card — ảnh trên, nội dung dưới. Có 3D tilt (data-tilt) + brutal hover.
+ * Toàn bộ card là link sang trang chi tiết /projects/<slug>.
  * `image` = ImageMetadata (astro:assets, tự WebP). Chưa có → /placeholder.png.
- * `metric` = slot impact (TODO số liệu thật, optional).
  */
 export interface Props {
+	slug: string;
 	name: string;
 	category?: string;
 	description: string;
 	tech?: string[];
-	metric?: string;
-	links?: { label: string; href: string }[];
 	image?: ImageMetadata;
 	index?: number;
 }
-const { name, category, description, tech = [], metric, links = [], image, index = 0 } = Astro.props;
+const { slug, name, category, description, tech = [], image, index = 0 } = Astro.props;
+const href = `/projects/${slug}`;
 ---
 
 <article class="pcard brutal tilt reveal" data-tilt="5" style={`--i:${index}`}>
-	<div class="thumb">
-		{category && <span class="cat eyebrow">{category}</span>}
-		{
-			image ? (
-				<Image src={image} alt={`${name} — preview`} width={600} height={400} format="webp" loading="lazy" />
-			) : (
-				<img src="/placeholder.png" alt="" width={600} height={400} loading="lazy" />
-			)
-		}
-	</div>
+	<a class="pcard-link" href={href} aria-label={`${name} — view case study`}>
+		<div class="thumb">
+			{category && <span class="cat eyebrow">{category}</span>}
+			{
+				image ? (
+					<Image src={image} alt={`${name} — preview`} width={600} height={400} format="webp" loading="lazy" />
+				) : (
+					<img src="/placeholder.png" alt="" width={600} height={400} loading="lazy" />
+				)
+			}
+		</div>
 
-	<div class="body">
-		<h3 class="text-h3">{name}</h3>
-		<p class="desc fw-extralight text-muted">{description}</p>
+		<div class="body">
+			<h3 class="text-h3">{name}</h3>
+			<p class="desc fw-extralight text-muted">{description}</p>
 
-		{
-			metric && (
-				<p class="metric-inline">
-					{/* TODO: số liệu thật */}
-					<span class="text-accent">{metric}</span>
-				</p>
-			)
-		}
+			{
+				tech.length > 0 && (
+					<ul class="stack">
+						{tech.map((t) => (
+							<Chip as="li">{t}</Chip>
+						))}
+					</ul>
+				)
+			}
 
-		{
-			tech.length > 0 && (
-				<ul class="stack">
-					{tech.map((t) => (
-						<Chip as="li">{t}</Chip>
-					))}
-				</ul>
-			)
-		}
-
-		{
-			links.length > 0 && (
-				<div class="links">
-					{links.map((l) => (
-						<a href={l.href} class="link" target="_blank" rel="noopener">
-							{l.label} ↗
-						</a>
-					))}
-				</div>
-			)
-		}
-	</div>
+			<span class="more-link text-accent">View case study →</span>
+		</div>
+	</a>
 </article>
 
 <style>
@@ -83,6 +66,13 @@ const { name, category, description, tech = [], metric, links = [], image, index
 		transform: perspective(800px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
 		border-color: var(--color-primary);
 		box-shadow: var(--glow-primary);
+	}
+	.pcard-link {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		color: inherit;
+		text-decoration: none;
 	}
 	.thumb {
 		position: relative;
@@ -110,17 +100,13 @@ const { name, category, description, tech = [], metric, links = [], image, index
 		flex-direction: column;
 		gap: var(--space-3);
 		padding: var(--space-6);
+		flex: 1;
 	}
 	.body h3 {
 		margin: 0;
 	}
 	.desc {
 		margin: 0;
-		font-size: var(--fs-sm);
-	}
-	.metric-inline {
-		margin: 0;
-		font-family: var(--font-mono);
 		font-size: var(--fs-sm);
 	}
 	.stack {
@@ -131,11 +117,14 @@ const { name, category, description, tech = [], metric, links = [], image, index
 		margin: 0;
 		padding: 0;
 	}
-	.links {
-		display: flex;
-		flex-wrap: wrap;
-		gap: var(--space-4);
+	.more-link {
 		margin-top: auto;
 		padding-top: var(--space-2);
+		font-family: var(--font-mono);
+		font-size: var(--fs-sm);
+		transition: transform var(--dur-fast);
+	}
+	.pcard:hover .more-link {
+		transform: translateX(4px);
 	}
 </style>
