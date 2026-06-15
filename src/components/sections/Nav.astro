@@ -1,23 +1,24 @@
 ---
+// href prefix "/" để Nav hoạt động cả trên trang chi tiết (/projects/<slug>).
 const links = [
-	{ label: 'About', href: '#about' },
-	{ label: 'Skills', href: '#skills' },
-	{ label: 'Featured', href: '#featured' },
-	{ label: 'Work', href: '#projects' },
-	{ label: 'Experience', href: '#experience' },
-	{ label: 'Contact', href: '#contact' },
+	{ label: 'About', href: '/#about' },
+	{ label: 'Skills', href: '/#skills' },
+	{ label: 'Work', href: '/#work' },
+	{ label: 'Design', href: '/#design' },
+	{ label: 'Experience', href: '/#experience' },
+	{ label: 'Contact', href: '/#contact' },
 ];
 ---
 
 <header class="nav">
 	<div class="container nav-inner">
-		<a href="#top" class="brand display">BQM</a>
+		<a href="/" class="brand display">BQM</a>
 		<nav aria-label="Primary">
 			<ul>
 				{links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
 			</ul>
 		</nav>
-		<a href="#contact" class="btn-outline nav-cta">Contact</a>
+		<a href="/#contact" class="btn-outline nav-cta">Contact</a>
 	</div>
 </header>
 
