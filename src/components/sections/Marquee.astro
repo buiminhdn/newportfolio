@@ -1,42 +1,53 @@
 ---
-/** Tech-stack strip — static row of keywords. */
 const stack = [
-	'Kotlin', 'Jetpack Compose', 'Coroutines', 'Flow', 'Clean Architecture',
-	'Next.js', 'React', 'React Native', 'TypeScript', 'Astro', '.NET Core',
-	'PostgreSQL', 'Redis', 'SignalR', 'Supabase', 'Firebase', 'AWS', 'Figma',
+  "Product Strategy",
+  "Process Improvement",
+  "Android Development",
+  "Web Development",
+  "UI/UX Design",
+  "Graphic Design",
+  "Marketing",
+  "Automation",
+  "Operations",
+  "Team Collaboration",
+  "Business Growth",
+  "Problem Solving",
+  "System Thinking",
+  "Customer Experience",
+  "Project Delivery",
 ];
 ---
 
 <section class="band" aria-label="Tech stack">
-	<ul class="row">
-		{stack.map((s) => <li>{s}</li>)}
-	</ul>
+  <ul class="row">
+    {stack.map((s) => <li>{s}</li>)}
+  </ul>
 </section>
 
 <style>
-	.band {
-		border-block: 1px solid var(--color-border-line);
-		padding-block: var(--space-6);
-		margin-top: var(--space-32);
-	}
-	.row {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
-		align-items: center;
-		gap: var(--space-2) var(--space-4);
-		list-style: none;
-		margin: 0;
-		padding-inline: var(--pad-x);
-	}
-	.row li {
-		font-size: var(--fs-base);
-		color: var(--color-text-muted);
-		white-space: nowrap;
-	}
-	.row li:not(:last-child)::after {
-		content: '·';
-		margin-left: var(--space-4);
-		color: var(--color-primary);
-	}
+  .band {
+    border-block: 1px solid var(--color-border-line);
+    padding-block: var(--space-6);
+    margin-top: var(--space-32);
+  }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-2) var(--space-4);
+    list-style: none;
+    margin: 0;
+    padding-inline: var(--pad-x);
+  }
+  .row li {
+    font-size: var(--fs-base);
+    color: var(--color-text-muted);
+    white-space: nowrap;
+  }
+  .row li:not(:last-child)::after {
+    content: "·";
+    margin-left: var(--space-4);
+    color: var(--color-primary);
+  }
 </style>

@@ -1,0 +1,363 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import SectionTitle from "../SectionTitle.astro";
+
+/**
+ * Career Journey — static timeline: image + content per milestone.
+ * Images: src/assets/career/<key>.{jpg,png,webp...}; none → /placeholder.png.
+ * Metrics "—" are TODO slots — fill with real numbers.
+ */
+const careerImgs = import.meta.glob<{ default: ImageMetadata }>(
+  "../../assets/career/*.{jpg,jpeg,png,webp,avif}",
+  { eager: true },
+);
+const imgByKey: Record<string, ImageMetadata> = {};
+for (const [path, mod] of Object.entries(careerImgs)) {
+  const base = path
+    .split("/")
+    .pop()!
+    .replace(/\.[^.]+$/, ""); // "android-1"
+  const key = base.replace(/-\d+$/, ""); // "android"
+  if (!imgByKey[key]) imgByKey[key] = mod.default; // first by name wins
+}
+
+type Milestone = {
+  key: string;
+  year: string;
+  title: string;
+  org: string;
+  win: string; // one concise key achievement
+  metrics: { v: string; l: string }[];
+};
+
+const milestones: Milestone[] = [
+  {
+    key: "computing",
+    year: "2021 — 2025",
+    title: "BSc Computing",
+    org: "University of Greenwich · Da Nang",
+    win: "Built a strong foundation in software engineering, databases, networking and product development.",
+    metrics: [
+      { v: "4yr", l: "Computing Degree" },
+      { v: "2025", l: "Graduated" },
+    ],
+  },
+  {
+    key: "freelance",
+    year: "2022 — Present",
+    title: "Freelance Builder",
+    org: "Self-employed",
+    win: "Worked across software, design, marketing and business operations to help ideas become real products.",
+    metrics: [
+      { v: "4+", l: "Years Building" },
+      { v: "20+", l: "Projects" },
+    ],
+  },
+  {
+    key: "teacher",
+    year: "2022 — 2023",
+    title: "English Teacher",
+    org: "English Education Center",
+    win: "Developed communication, presentation and mentoring skills by teaching and simplifying complex concepts.",
+    metrics: [
+      { v: "1yr", l: "Teaching" },
+      { v: "—", l: "Students Supported" },
+    ],
+  },
+  {
+    key: "marketing",
+    year: "2022 — Present",
+    title: "Marketing & Brand Design",
+    org: "Multiple Brands",
+    win: "Created websites, social media content, advertising materials and brand assets across education, retail, pet and F&B businesses.",
+    metrics: [
+      { v: "4+", l: "Brands" },
+      { v: "100+", l: "Design Assets" },
+    ],
+  },
+  {
+    key: "ecommerce",
+    year: "2022 — Present",
+    title: "E-commerce & Marketplace Operations",
+    org: "Mecute · Shopee · Online Stores",
+    win: "Managed product listings, visual content, SEO optimization, customer support and marketplace operations to drive online sales and business growth.",
+    metrics: [
+      { v: "2022", l: "Started" },
+      { v: "Shopee", l: "Marketplace" },
+    ],
+  },
+  {
+    key: "android",
+    year: "2025 — Present",
+    title: "Android Developer",
+    org: "Lutech · Da Nang",
+    win: "Building and maintaining production Android applications using Kotlin, Jetpack Compose and modern architecture practices.",
+    metrics: [
+      { v: "2025", l: "Joined Lutech" },
+      { v: "Compose", l: "Modern Android" },
+    ],
+  },
+];
+---
+
+<section class="section journey" id="about" aria-labelledby="about-title">
+  <SectionTitle id="about-title" eyebrow="the journey so far"
+    >Career Journey</SectionTitle
+  >
+
+  <ol class="timeline">
+    {
+      milestones.map((m) => {
+        const img = imgByKey[m.key];
+        return (
+          <li class="milestone">
+            <div class="visual">
+              {img ? (
+                <figure class="frame">
+                  <Image
+                    src={img}
+                    alt={`${m.title} — ${m.org}`}
+                    width={1100}
+                    height={690}
+                    format="webp"
+                    loading="lazy"
+                  />
+                </figure>
+              ) : (
+                <figure class="frame">
+                  <img
+                    src="/placeholder.png"
+                    alt={`${m.title} — visual coming soon`}
+                    width={1100}
+                    height={690}
+                    loading="lazy"
+                  />
+                  <figcaption class="ph-note">{m.key}.jpg</figcaption>
+                </figure>
+              )}
+            </div>
+
+            <div class="rail" aria-hidden="true">
+              <span class="node" />
+            </div>
+
+            <div class="content">
+              <span class="year eyebrow">{m.year}</span>
+              <h3 class="m-title">{m.title}</h3>
+              <p class="org text-accent">{m.org}</p>
+              <p class="win">{m.win}</p>
+              <dl class="stats">
+                {m.metrics.map((s) => (
+                  <div class="stat">
+                    <dd class="v">{s.v}</dd>
+                    <dt class="l">{s.l}</dt>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          </li>
+        );
+      })
+    }
+  </ol>
+</section>
+
+<style>
+  /* Width matches the page container (same as hero). */
+  .journey {
+    --spine: 50%;
+    --rail: 5rem; /* 80px timeline column = 40px gap from content edge to spine */
+    position: relative;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--pad-x);
+  }
+
+  /* ---- Spine ---- */
+  .timeline {
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--spine);
+    width: 2px;
+    margin-left: -1px;
+    border-radius: 2px;
+    background: var(--color-border-line);
+  }
+
+  /* ---- Milestone row: image | rail | content ---- */
+  .milestone {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr var(--rail) 1fr;
+    align-items: center;
+    min-height: min(62vh, 520px);
+  }
+
+  .visual {
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+    justify-self: stretch;
+  }
+  .content {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  /* ---- Node on the spine ---- */
+  .rail {
+    grid-column: 2;
+    grid-row: 1;
+    position: relative;
+    align-self: stretch;
+  }
+  .node {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin: -0.75rem 0 0 -0.75rem;
+    border-radius: var(--radius-full);
+    background: var(--color-primary);
+    box-shadow: 0 0 0 6px var(--color-bg);
+  }
+
+  /* ---- Visual ---- */
+  .frame {
+    position: relative;
+    margin: 0;
+    aspect-ratio: 16 / 10;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--color-border-soft);
+    background: var(--color-surface);
+  }
+  .frame :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* placeholder badge — file name to drop into assets/about */
+  .ph-note {
+    position: absolute;
+    left: var(--space-3);
+    bottom: var(--space-3);
+    margin: 0;
+    font-family: var(--font);
+    font-size: var(--fs-xs);
+    color: var(--color-text);
+    background: rgba(8, 8, 11, 0.7);
+    border: 1px solid var(--color-border-line);
+    border-radius: var(--radius-full);
+    padding: var(--space-1) var(--space-3);
+  }
+
+  /* ---- Content ---- */
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-self: start;
+    width: 100%;
+    margin-right: auto;
+    text-align: left;
+  }
+  .year {
+    display: block;
+    margin-bottom: var(--space-3);
+  }
+  .m-title {
+    margin: 0;
+    font-family: var(--font);
+    text-transform: uppercase;
+    line-height: 1.05;
+    font-size: clamp(1.5rem, 1.9vw, 2rem);
+    letter-spacing: 0.02em;
+  }
+  .org {
+    margin: var(--space-2) 0 var(--space-5);
+    font-family: var(--font);
+    font-size: var(--fs-sm);
+  }
+  .win {
+    margin: 0 0 var(--space-8);
+    font-size: var(--fs-base);
+    font-weight: var(--fw-extralight);
+    color: var(--color-text-muted);
+    max-width: 28rem;
+  }
+  .stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin: 0;
+    justify-content: flex-start;
+  }
+  .stat {
+    flex: 1 1 0;
+    min-width: 9rem;
+    border: 1px solid var(--color-border-line);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    padding: var(--space-5);
+  }
+  .stat .v {
+    margin: 0;
+    font-family: var(--font);
+    font-size: clamp(1.6rem, 2.2vw, 2.1rem);
+    line-height: 1;
+    color: var(--color-text);
+  }
+  .stat .l {
+    margin: var(--space-2) 0 0;
+    font-family: var(--font);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
+  }
+
+  /* ---- Responsive: stack to single left rail ---- */
+  @media (max-width: 999px) {
+    .journey {
+      --spine: 1.25rem;
+      --rail: 2.5rem;
+    }
+    .milestone {
+      grid-template-columns: var(--rail) 1fr;
+      align-items: start;
+      min-height: 0;
+      padding-block: var(--space-8);
+    }
+    .visual,
+    .content {
+      grid-column: 2;
+      grid-row: auto;
+    }
+    .content {
+      justify-self: stretch;
+      text-align: left;
+      align-items: flex-start;
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      padding: var(--space-8) 0 0;
+    }
+    .node {
+      top: 2.4rem;
+      margin-top: 0;
+    }
+  }
+</style>
