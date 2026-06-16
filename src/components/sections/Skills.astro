@@ -1,297 +1,323 @@
 ---
-import SectionTitle from '../SectionTitle.astro';
+import SectionTitle from "../SectionTitle.astro";
 
-const androidStack = [
-	{ name: 'Kotlin', detail: 'Production-first language for reliable Android systems' },
-	{ name: 'Jetpack Compose', detail: 'Modern UI built with reusable, state-driven components' },
-	{ name: 'Clean Architecture', detail: 'Readable boundaries between UI, domain and data layers' },
-	{ name: 'MVVM / MVI', detail: 'Predictable state, testable flows and scalable screen logic' },
-	{ name: 'Firebase', detail: 'Auth, analytics, storage and real-time product infrastructure' },
-	{ name: 'Room', detail: 'Local-first persistence with structured offline behavior' },
-	{ name: 'Koin', detail: 'Lightweight dependency injection for modular features' },
+const androidCapabilities = [
+  {
+    name: "Architecture",
+    detail:
+      "Builds maintainable applications with clear separation of concerns and scalable structure",
+  },
+  {
+    name: "UI Systems",
+    detail:
+      "Creates polished, reusable interfaces focused on clarity and user experience",
+  },
+  {
+    name: "State Management",
+    detail:
+      "Designs predictable application flows with stable and testable behavior",
+  },
+  {
+    name: "Offline & Data",
+    detail:
+      "Supports resilient local-first experiences and reliable data handling",
+  },
+  {
+    name: "Release & Quality",
+    detail:
+      "Ensures applications are optimized, maintainable and production-ready",
+  },
 ];
 
 const androidMetrics = [
-	{ value: 4, suffix: '+', label: 'Years of experience' },
-	{ value: 10, suffix: '+', label: 'Apps shipped' },
-	{ value: 100, suffix: 'K+', label: 'Users reached' },
-	{ value: 20, suffix: '+', label: 'Production projects' },
+  { value: 4, suffix: "+", label: "Years Building Products" },
+  { value: 20, suffix: "+", label: "Projects Completed" },
+  { value: 10, suffix: "+", label: "Apps & Tools Built" },
+  { value: 3, suffix: "", label: "Domains Worked In" },
 ];
 
 const supportCards = [
-	{
-		title: 'UI/UX Design',
-		kicker: 'Product clarity',
-		body: 'Turns rough ideas into interfaces people can understand, scan and use without friction.',
-		tools: 'Figma · Design systems · Prototypes',
-	},
-	{
-		title: 'Web Development',
-		kicker: 'Launch-ready systems',
-		body: 'Builds fast portfolio, product and business websites with clean front-end architecture.',
-		tools: 'Astro · React · TypeScript · Firebase',
-	},
-	{
-		title: 'Marketing',
-		kicker: 'Demand + content',
-		body: 'Shapes landing pages, campaigns and visual assets around conversion instead of decoration.',
-		tools: 'Brand design · Social content · SEO',
-	},
-	{
-		title: 'Business',
-		kicker: 'End-to-end thinking',
-		body: 'Connects product decisions to users, operations and revenue so shipped work has a reason.',
-		tools: 'E-commerce · Client work · Strategy',
-	},
+  {
+    title: "Web Development",
+    kicker: "Launch-ready products",
+    body: "Builds responsive websites, landing pages and web applications with performance and scalability in mind.",
+    tools: "Business Websites · SaaS · Internal Tools",
+  },
+  {
+    title: "Branding & Marketing",
+    kicker: "Growth-driven execution",
+    body: "Builds brand presence through visual identity, websites, SEO, content and lead generation.",
+    tools: "Brand Identity · SEO · Content · Lead Generation",
+  },
+  {
+    title: "Business Operations",
+    kicker: "Product perspective",
+    body: "Experience across e-commerce, client projects and operations brings practical context to product decisions.",
+    tools: "Operations · Automation · Optimization",
+  },
 ];
 ---
 
-<section class="section container skills-showcase" id="skills" aria-labelledby="skills-title">
-	<SectionTitle id="skills-title" eyebrow="what i build best">Skills</SectionTitle>
+<section
+  class="section container skills-showcase"
+  id="skills"
+  aria-labelledby="skills-title"
+>
+  <SectionTitle id="skills-title" eyebrow="what i build best"
+    >Skills</SectionTitle
+  >
 
-	<div class="skills-bento">
-		<article class="android-card">
-			<div class="android-copy">
-				<p class="eyebrow">Primary expertise</p>
-				<h3>Android Engineering</h3>
-				<p class="android-lead">
-					Production Android apps with polished interfaces, resilient architecture and product
-					thinking from first screen to release.
-				</p>
-			</div>
+  <div class="skills-bento">
+    <article class="android-card">
+      <div class="android-copy">
+        <p class="eyebrow">Primary expertise</p>
+        <h3>Android Engineering</h3>
+        <p class="android-lead">
+          Production Android apps with polished interfaces, resilient
+          architecture and product thinking from first screen to release.
+        </p>
+      </div>
 
-			<dl class="impact-grid" aria-label="Android impact metrics">
-				{
-					androidMetrics.map((metric) => (
-						<div class="impact">
-							<dd>
-								<span class="count">{metric.value}<span class="suffix">{metric.suffix}</span></span>
-							</dd>
-							<dt>{metric.label}</dt>
-						</div>
-					))
-				}
-			</dl>
+      <dl class="impact-grid" aria-label="Android impact metrics">
+        {
+          androidMetrics.map((metric) => (
+            <div class="impact">
+              <dd>
+                <span class="count">
+                  {metric.value}
+                  <span class="suffix">{metric.suffix}</span>
+                </span>
+              </dd>
+              <dt>{metric.label}</dt>
+            </div>
+          ))
+        }
+      </dl>
 
-			<div class="stack-panel">
-				<p class="stack-title">Core build system</p>
-				<ul class="stack-list" aria-label="Android engineering stack">
-					{
-						androidStack.map((item) => (
-							<li>
-								<strong>{item.name}</strong>
-								<span>{item.detail}</span>
-							</li>
-						))
-					}
-				</ul>
-			</div>
-		</article>
+      <div class="stack-panel">
+        <p class="stack-title">Core build system</p>
+        <ul class="stack-list" aria-label="Android engineering stack">
+          {
+            androidCapabilities.map((item) => (
+              <li>
+                <strong>{item.name}</strong>
+                <span>{item.detail}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </article>
 
-		<div class="support-grid">
-			{
-				supportCards.map((card) => (
-					<article class="support-card">
-						<p class="support-kicker">{card.kicker}</p>
-						<h3>{card.title}</h3>
-						<p>{card.body}</p>
-						<span>{card.tools}</span>
-					</article>
-				))
-			}
-		</div>
-	</div>
+    <div class="support-grid">
+      {
+        supportCards.map((card) => (
+          <article class="support-card">
+            <p class="support-kicker">{card.kicker}</p>
+            <h3>{card.title}</h3>
+            <p>{card.body}</p>
+            <span>{card.tools}</span>
+          </article>
+        ))
+      }
+    </div>
+  </div>
 </section>
 
 <style>
-	.skills-showcase {
-		position: relative;
-	}
-	.skills-bento {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: var(--space-6);
-	}
-	.android-card,
-	.support-card {
-		position: relative;
-		overflow: hidden;
-		border: 1px solid var(--color-border-line);
-		border-radius: 8px;
-		background: var(--color-surface);
-	}
-	.android-card {
-		min-height: 32rem;
-		padding: clamp(var(--space-8), 5vw, var(--space-16));
-		display: grid;
-		grid-template-rows: auto auto 1fr;
-		gap: var(--space-10);
-		border-color: color-mix(in srgb, var(--color-primary) 72%, var(--color-border-line));
-	}
-	.android-copy {
-		max-width: 46rem;
-	}
-	.android-copy .eyebrow {
-		margin: 0 0 var(--space-5);
-	}
-	.android-copy h3 {
-		margin: 0;
-		font-family: var(--font);
-		font-size: clamp(1.75rem, 4vw, 2.75rem);
-		line-height: 1;
-		text-transform: uppercase;
-		letter-spacing: 0;
-	}
-	.android-lead {
-		max-width: 38rem;
-		margin: var(--space-6) 0 0;
-		color: var(--color-text-subtle);
-		font-size: var(--fs-lg);
-		font-weight: var(--fw-light);
-		line-height: 1.55;
-	}
-	.impact-grid {
-		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: var(--space-3);
-		margin: 0;
-	}
-	.impact {
-		border-top: 1px solid var(--color-border-line);
-		padding-top: var(--space-4);
-	}
-	.impact dd,
-	.impact dt {
-		margin: 0;
-	}
-	.impact dd {
-		font-family: var(--font);
-		font-size: clamp(1.75rem, 3.5vw, 2.5rem);
-		line-height: 1;
-		color: var(--color-text);
-	}
-	.impact dt {
-		margin-top: var(--space-2);
-		max-width: 8.5rem;
-		font-family: var(--font);
-		font-size: var(--fs-xs);
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		color: var(--color-text-muted);
-	}
-	.count .suffix {
-		color: var(--color-primary);
-	}
-	.stack-panel {
-		align-self: end;
-		border-top: 1px solid color-mix(in srgb, var(--color-primary) 34%, var(--color-border-line));
-		padding-top: var(--space-6);
-	}
-	.stack-title {
-		margin: 0 0 var(--space-5);
-		font-family: var(--font);
-		font-size: var(--fs-xs);
-		text-transform: uppercase;
-		letter-spacing: 0.14em;
-		color: var(--color-primary);
-	}
-	.stack-list {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: var(--space-4);
-		list-style: none;
-		margin: 0;
-		padding: 0;
-	}
-	.stack-list li {
-		display: grid;
-		gap: var(--space-1);
-		padding-bottom: var(--space-4);
-		border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-	}
-	.stack-list li:last-child {
-		padding-bottom: 0;
-		border-bottom: 0;
-	}
-	.stack-list strong {
-		font-size: var(--fs-base);
-		color: var(--color-text);
-	}
-	.stack-list span {
-		color: var(--color-text-muted);
-		font-size: var(--fs-sm);
-		line-height: 1.55;
-	}
-	.support-grid {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: var(--space-6);
-	}
-	.support-card {
-		min-height: 15rem;
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		padding: var(--space-6);
-	}
-	.support-card:nth-child(2) {
-		min-height: 18rem;
-	}
-	.support-card:nth-child(3) {
-		min-height: 13rem;
-	}
-	.support-kicker {
-		margin: 0;
-		font-family: var(--font);
-		font-size: var(--fs-xs);
-		text-transform: uppercase;
-		letter-spacing: 0.14em;
-		color: var(--color-primary);
-	}
-	.support-card h3 {
-		margin: var(--space-5) 0 var(--space-3);
-		font-family: var(--font);
-		font-size: clamp(1.375rem, 2.2vw, 1.75rem);
-		line-height: 1.1;
-		text-transform: uppercase;
-		letter-spacing: 0;
-	}
-	.support-card p:not(.support-kicker) {
-		margin: 0;
-		color: var(--color-text-muted);
-		font-size: var(--fs-sm);
-		line-height: 1.6;
-	}
-	.support-card span {
-		display: block;
-		margin-top: var(--space-6);
-		padding-top: var(--space-4);
-		border-top: 1px solid var(--color-border-line);
-		font-family: var(--font);
-		font-size: var(--fs-xs);
-		color: var(--color-text-subtle);
-	}
-	@media (min-width: 760px) {
-		.impact-grid {
-			grid-template-columns: repeat(4, minmax(0, 1fr));
-		}
-		.stack-list {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-		}
-		.support-grid {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-		}
-	}
-	@media (min-width: 1180px) {
-		.skills-bento {
-			grid-template-columns: minmax(0, 1.85fr) minmax(20rem, 0.95fr);
-			align-items: stretch;
-		}
-		.android-card {
-			min-height: 40rem;
-		}
-		.support-grid {
-			grid-template-columns: 1fr;
-		}
-	}
+  .skills-showcase {
+    position: relative;
+  }
+  .skills-bento {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+  .android-card,
+  .support-card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--color-border-line);
+    border-radius: 8px;
+    background: var(--color-surface);
+  }
+  .android-card {
+    min-height: 32rem;
+    padding: clamp(var(--space-8), 5vw, var(--space-16));
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    gap: var(--space-10);
+    border-color: color-mix(
+      in srgb,
+      var(--color-primary) 72%,
+      var(--color-border-line)
+    );
+  }
+  .android-copy {
+    max-width: 46rem;
+  }
+  .android-copy .eyebrow {
+    margin: 0 0 var(--space-5);
+  }
+  .android-copy h3 {
+    margin: 0;
+    font-family: var(--font);
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0;
+  }
+  .android-lead {
+    max-width: 38rem;
+    margin: var(--space-6) 0 0;
+    color: var(--color-text-subtle);
+    font-size: var(--fs-lg);
+    font-weight: var(--fw-light);
+    line-height: 1.55;
+  }
+  .impact-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3);
+    margin: 0;
+  }
+  .impact {
+    border-top: 1px solid var(--color-border-line);
+    padding-top: var(--space-4);
+  }
+  .impact dd,
+  .impact dt {
+    margin: 0;
+  }
+  .impact dd {
+    font-family: var(--font);
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+    line-height: 1;
+    color: var(--color-text);
+  }
+  .impact dt {
+    margin-top: var(--space-2);
+    max-width: 8.5rem;
+    font-family: var(--font);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+  }
+  .count .suffix {
+    color: var(--color-primary);
+  }
+  .stack-panel {
+    align-self: end;
+    border-top: 1px solid
+      color-mix(in srgb, var(--color-primary) 34%, var(--color-border-line));
+    padding-top: var(--space-6);
+  }
+  .stack-title {
+    margin: 0 0 var(--space-5);
+    font-family: var(--font);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-primary);
+  }
+  .stack-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .stack-list li {
+    display: grid;
+    gap: var(--space-1);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .stack-list li:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+  .stack-list strong {
+    font-size: var(--fs-base);
+    color: var(--color-text);
+  }
+  .stack-list span {
+    color: var(--color-text-muted);
+    font-size: var(--fs-sm);
+    line-height: 1.55;
+  }
+  .support-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+  .support-card {
+    min-height: 15rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: var(--space-6);
+  }
+  .support-card:nth-child(2) {
+    min-height: 18rem;
+  }
+  .support-card:nth-child(3) {
+    min-height: 13rem;
+  }
+  .support-kicker {
+    margin: 0;
+    font-family: var(--font);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-primary);
+  }
+  .support-card h3 {
+    margin: var(--space-5) 0 var(--space-3);
+    font-family: var(--font);
+    font-size: clamp(1.375rem, 2.2vw, 1.75rem);
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: 0;
+  }
+  .support-card p:not(.support-kicker) {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--fs-sm);
+    line-height: 1.6;
+  }
+  .support-card span {
+    display: block;
+    margin-top: var(--space-6);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border-line);
+    font-family: var(--font);
+    font-size: var(--fs-xs);
+    color: var(--color-text-subtle);
+  }
+  @media (min-width: 760px) {
+    .impact-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .stack-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .support-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1180px) {
+    .skills-bento {
+      grid-template-columns: minmax(0, 1.85fr) minmax(20rem, 0.95fr);
+      align-items: stretch;
+    }
+    .android-card {
+      min-height: 40rem;
+    }
+    .support-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>

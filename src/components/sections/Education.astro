@@ -1,7 +1,7 @@
 ---
-import { Image } from 'astro:assets';
-import type { ImageMetadata } from 'astro';
-import SectionTitle from '../SectionTitle.astro';
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import SectionTitle from "../SectionTitle.astro";
 
 /**
  * Education — horizontal image slider (10 slots). Title left, arrows top-right.
@@ -9,231 +9,270 @@ import SectionTitle from '../SectionTitle.astro';
  * Images: src/assets/education/<n>.{jpg,png,webp} (n = 1..10); missing → /placeholder.png.
  */
 const eduImages = import.meta.glob<{ default: ImageMetadata }>(
-	'../../assets/education/*.{jpg,jpeg,png,webp,avif}',
-	{ eager: true },
+  "../../assets/education/*.{jpg,jpeg,png,webp,avif}",
+  { eager: true },
 );
 const pick = (n: number): ImageMetadata | undefined => {
-	const match = Object.entries(eduImages).find(([path]) =>
-		path.split('/').pop()?.startsWith(`${n}.`),
-	);
-	return match?.[1].default;
+  const match = Object.entries(eduImages).find(([path]) =>
+    path.split("/").pop()?.startsWith(`${n}.`),
+  );
+  return match?.[1].default;
 };
 const slides = Array.from({ length: 10 }, (_, i) => pick(i + 1));
 ---
 
-<section class="section edu" id="education" aria-labelledby="edu-title" data-edu-slider>
-	<div class="edu-head container">
-		<SectionTitle id="edu-title" eyebrow="education">Education</SectionTitle>
-		<div class="arrows">
-			<button class="arrow" type="button" data-prev aria-label="Previous images">←</button>
-			<button class="arrow" type="button" data-next aria-label="Next images">→</button>
-		</div>
-	</div>
+<section
+  class="section edu"
+  id="education"
+  aria-labelledby="edu-title"
+  data-edu-slider
+>
+  <div class="edu-head container">
+    <SectionTitle id="edu-title" eyebrow="education">Education</SectionTitle>
+    <div class="arrows">
+      <button class="arrow" type="button" data-prev aria-label="Previous images"
+        >←</button
+      >
+      <button class="arrow" type="button" data-next aria-label="Next images"
+        >→</button
+      >
+    </div>
+  </div>
 
-	<div class="edu-intro container">
-		<div class="edu-degree">
-			<h3 class="edu-school">University of Greenwich — Da Nang Campus</h3>
-			<p class="edu-meta text-accent">Bachelor of Computing (BSc) · 2021 — 2025</p>
-			<p class="edu-desc text-muted fw-extralight">
-				Graduated top of the Information Technology cohort. Strong foundation in
-				software engineering, web &amp; mobile development, databases, system analysis
-				and product development.
-			</p>
-		</div>
-		<ul class="awards">
-			<li class="award">
-				<span class="award-badge" aria-hidden="true">🏆</span>
-				<span class="award-text">
-					<span class="award-title">Valedictorian — Information Technology</span>
-					<span class="award-sub text-muted">Top graduate of the IT program · University of Greenwich</span>
-				</span>
-			</li>
-			<li class="award">
-				<span class="award-badge" aria-hidden="true">🎖️</span>
-				<span class="award-text">
-					<span class="award-title">TODO: Award / Scholarship</span>
-					<span class="award-sub text-muted">TODO: tên giải thưởng · năm · đơn vị trao</span>
-				</span>
-			</li>
-		</ul>
-	</div>
+  <div class="edu-intro container">
+    <div class="edu-degree">
+      <h3 class="edu-school">University of Greenwich — Da Nang Campus</h3>
+      <p class="edu-meta text-accent">
+        Bachelor of Computing (BSc) · 2021 — 2025
+      </p>
+      <p class="edu-desc text-muted fw-extralight">
+        Graduated top of the Information Technology cohort. Strong foundation in
+        software engineering, web &amp; mobile development, databases, system
+        analysis and product development.
+      </p>
+    </div>
+    <ul class="awards">
+      <li class="award">
+        <span class="award-badge" aria-hidden="true">🏆</span>
+        <span class="award-text">
+          <span class="award-title">Valedictorian — Information Technology</span
+          >
+          <span class="award-sub text-muted"
+            >Top graduate of the IT program · University of Greenwich</span
+          >
+        </span>
+      </li>
+      <li class="award">
+        <span class="award-badge" aria-hidden="true">🎖️</span>
+        <span class="award-text">
+          <span class="award-title">TODO: Award / Scholarship</span>
+          <span class="award-sub text-muted"
+            >TODO: tên giải thưởng · năm · đơn vị trao</span
+          >
+        </span>
+      </li>
+    </ul>
+  </div>
 
-	<div class="rail" data-rail role="group" aria-label="Education photos">
-		{
-			slides.map((img, i) => (
-				<div class="slide">
-					{img ? (
-						<Image src={img} alt={`Education photo ${i + 1}`} width={800} height={534} format="webp" loading="lazy" />
-					) : (
-						<img src="/placeholder.png" alt="" width={800} height={534} loading="lazy" />
-					)}
-				</div>
-			))
-		}
-	</div>
+  <div class="rail" data-rail role="group" aria-label="Education photos">
+    {
+      slides.map((img, i) => (
+        <div class="slide">
+          {img ? (
+            <Image
+              src={img}
+              alt={`Education photo ${i + 1}`}
+              width={900}
+              format="webp"
+              loading="lazy"
+            />
+          ) : (
+            <img
+              src="/placeholder.png"
+              alt=""
+              width={800}
+              height={534}
+              loading="lazy"
+            />
+          )}
+        </div>
+      ))
+    }
+  </div>
 </section>
 
 <style>
-	.edu {
-		/* left edge = container's inner-left; rail bleeds to the right viewport edge */
-		--edge: max(var(--pad-x), calc((100vw - var(--container-max)) / 2 + var(--pad-x)));
-	}
-	.edu-head {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: var(--space-6);
-		margin-bottom: var(--space-8);
-	}
-	.edu-head :global(.section-title) {
-		margin-bottom: 0;
-	}
-	.arrows {
-		display: flex;
-		gap: var(--space-3);
-		flex: none;
-	}
-	.arrow {
-		width: 3rem;
-		height: 3rem;
-		border-radius: var(--radius-full);
-		border: 1px solid var(--color-border);
-		background: transparent;
-		color: var(--color-text);
-		font: inherit;
-		font-size: var(--fs-lg);
-		cursor: pointer;
-	}
-	.arrow:hover:not(:disabled) {
-		border-color: var(--color-primary);
-		color: var(--color-primary);
-	}
-	.arrow:disabled {
-		opacity: 0.3;
-		cursor: default;
-	}
+  .edu {
+    /* left edge = container's inner-left; rail bleeds to the right viewport edge */
+    --edge: max(
+      var(--pad-x),
+      calc((100vw - var(--container-max)) / 2 + var(--pad-x))
+    );
+  }
+  .edu-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-6);
+    margin-bottom: var(--space-8);
+  }
+  .edu-head :global(.section-title) {
+    margin-bottom: 0;
+  }
+  .arrows {
+    display: flex;
+    gap: var(--space-3);
+    flex: none;
+  }
+  .arrow {
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--color-border);
+    background: transparent;
+    color: var(--color-text);
+    font: inherit;
+    font-size: var(--fs-lg);
+    cursor: pointer;
+  }
+  .arrow:hover:not(:disabled) {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+  .arrow:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
 
-	.edu-intro {
-		display: grid;
-		gap: var(--space-8);
-		margin-bottom: var(--space-10);
-	}
-	.edu-school {
-		margin: 0;
-		font-size: var(--fs-h3);
-		font-weight: var(--fw-medium);
-		line-height: 1.2;
-	}
-	.edu-meta {
-		margin: var(--space-2) 0 var(--space-4);
-		font-size: var(--fs-sm);
-	}
-	.edu-desc {
-		margin: 0;
-		max-width: 42rem;
-		font-size: var(--fs-base);
-		line-height: 1.6;
-	}
-	.awards {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		display: grid;
-		gap: var(--space-4);
-	}
-	.award {
-		display: flex;
-		align-items: flex-start;
-		gap: var(--space-4);
-		padding: var(--space-5);
-		border: 1px solid var(--color-border-line);
-		border-radius: var(--radius-md);
-		background: var(--color-surface);
-	}
-	.award-badge {
-		font-size: var(--fs-h3);
-		line-height: 1;
-		flex: none;
-	}
-	.award-text {
-		display: grid;
-		gap: var(--space-1);
-	}
-	.award-title {
-		font-weight: var(--fw-medium);
-		font-size: var(--fs-sm);
-	}
-	.award-sub {
-		font-size: var(--fs-xs);
-	}
+  .edu-intro {
+    display: grid;
+    gap: var(--space-8);
+    margin-bottom: var(--space-10);
+  }
+  .edu-school {
+    margin: 0;
+    font-size: var(--fs-h3);
+    font-weight: var(--fw-medium);
+    line-height: 1.2;
+  }
+  .edu-meta {
+    margin: var(--space-2) 0 var(--space-4);
+    font-size: var(--fs-sm);
+  }
+  .edu-desc {
+    margin: 0;
+    max-width: 42rem;
+    font-size: var(--fs-base);
+    line-height: 1.6;
+  }
+  .awards {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-4);
+  }
+  .award {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-4);
+    padding: var(--space-5);
+    border: 1px solid var(--color-border-line);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+  }
+  .award-badge {
+    font-size: var(--fs-h3);
+    line-height: 1;
+    flex: none;
+  }
+  .award-text {
+    display: grid;
+    gap: var(--space-1);
+  }
+  .award-title {
+    font-weight: var(--fw-medium);
+    font-size: var(--fs-sm);
+  }
+  .award-sub {
+    font-size: var(--fs-xs);
+  }
 
-	@media (min-width: 768px) {
-		.edu-intro {
-			grid-template-columns: 1fr 1fr;
-			align-items: start;
-			gap: var(--space-16);
-		}
-	}
+  @media (min-width: 768px) {
+    .edu-intro {
+      grid-template-columns: 1fr 1fr;
+      align-items: start;
+      gap: var(--space-16);
+    }
+  }
 
-	.rail {
-		display: flex;
-		gap: var(--space-4);
-		overflow-x: auto;
-		scroll-snap-type: x proximity;
-		scroll-behavior: smooth;
-		scroll-padding-left: var(--edge);
-		padding-left: var(--edge);
-		scrollbar-width: none;
-		-ms-overflow-style: none;
-	}
-	.rail::-webkit-scrollbar {
-		display: none;
-	}
-	.slide {
-		flex: 0 0 auto;
-		width: clamp(16rem, 60vw, 26rem);
-		aspect-ratio: 3 / 2;
-		scroll-snap-align: start;
-		overflow: hidden;
-		border-radius: var(--radius-md);
-		background: var(--color-secondary);
-	}
-	.slide :is(img) {
-		width: 100%;
-		height: 100%;
-		max-width: none;
-		object-fit: cover;
-		display: block;
-	}
+  .rail {
+    display: flex;
+    gap: var(--space-4);
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scroll-behavior: smooth;
+    scroll-padding-left: var(--edge);
+    padding-left: var(--edge);
+    padding-right: var(--edge);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .rail::-webkit-scrollbar {
+    display: none;
+  }
+  .slide {
+    flex: 0 0 auto;
+    height: clamp(13rem, 42vw, 20rem);
+    scroll-snap-align: start;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    background: var(--color-secondary);
+  }
+  .slide :is(img) {
+    width: auto;
+    height: 100%;
+    max-width: none;
+    object-fit: contain;
+    display: block;
+  }
 
-	@media (prefers-reduced-motion: reduce) {
-		.rail {
-			scroll-behavior: auto;
-		}
-	}
+  @media (prefers-reduced-motion: reduce) {
+    .rail {
+      scroll-behavior: auto;
+    }
+  }
 </style>
 
 <script>
-	for (const root of document.querySelectorAll<HTMLElement>('[data-edu-slider]')) {
-		const rail = root.querySelector<HTMLElement>('[data-rail]');
-		const prev = root.querySelector<HTMLButtonElement>('[data-prev]');
-		const next = root.querySelector<HTMLButtonElement>('[data-next]');
-		if (!rail || !prev || !next) continue;
+  for (const root of document.querySelectorAll<HTMLElement>(
+    "[data-edu-slider]",
+  )) {
+    const rail = root.querySelector<HTMLElement>("[data-rail]");
+    const prev = root.querySelector<HTMLButtonElement>("[data-prev]");
+    const next = root.querySelector<HTMLButtonElement>("[data-next]");
+    if (!rail || !prev || !next) continue;
 
-		const step = () => {
-			const slide = rail.querySelector<HTMLElement>('.slide');
-			const gap = parseFloat(getComputedStyle(rail).columnGap) || 16;
-			return slide ? slide.getBoundingClientRect().width + gap : rail.clientWidth * 0.8;
-		};
-		const update = () => {
-			const max = rail.scrollWidth - rail.clientWidth;
-			prev.disabled = rail.scrollLeft <= 2;
-			next.disabled = rail.scrollLeft >= max - 2;
-		};
-		prev.addEventListener('click', () => rail.scrollBy({ left: -step(), behavior: 'smooth' }));
-		next.addEventListener('click', () => rail.scrollBy({ left: step(), behavior: 'smooth' }));
-		rail.addEventListener('scroll', update, { passive: true });
-		addEventListener('resize', update);
-		update();
-	}
+    const step = () => {
+      const slide = rail.querySelector<HTMLElement>(".slide");
+      const gap = parseFloat(getComputedStyle(rail).columnGap) || 16;
+      return slide
+        ? slide.getBoundingClientRect().width + gap
+        : rail.clientWidth * 0.8;
+    };
+    const update = () => {
+      const max = rail.scrollWidth - rail.clientWidth;
+      prev.disabled = rail.scrollLeft <= 2;
+      next.disabled = rail.scrollLeft >= max - 2;
+    };
+    prev.addEventListener("click", () =>
+      rail.scrollBy({ left: -step(), behavior: "smooth" }),
+    );
+    next.addEventListener("click", () =>
+      rail.scrollBy({ left: step(), behavior: "smooth" }),
+    );
+    rail.addEventListener("scroll", update, { passive: true });
+    addEventListener("resize", update);
+    update();
+  }
 </script>

@@ -1,28 +1,33 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Nav from '../components/sections/Nav.astro';
-import Hero from '../components/sections/Hero.astro';
-import Marquee from '../components/sections/Marquee.astro';
-import Career from '../components/sections/Career.astro';
-import Skills from '../components/sections/Skills.astro';
-import FeaturedWork from '../components/sections/FeaturedWork.astro';
-import DesignShowcase from '../components/sections/DesignShowcase.astro';
-import Experience from '../components/sections/Experience.astro';
-import Education from '../components/sections/Education.astro';
-import Contact from '../components/sections/Contact.astro';
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/sections/Nav.astro";
+import Hero from "../components/sections/Hero.astro";
+import Marquee from "../components/sections/Marquee.astro";
+import Career from "../components/sections/Career.astro";
+import Skills from "../components/sections/Skills.astro";
+import FeaturedWork from "../components/sections/FeaturedWork.astro";
+import DesignShowcase from "../components/sections/DesignShowcase.astro";
+import Activity from "../components/sections/Activity.astro";
+import Education from "../components/sections/Education.astro";
+import Contact from "../components/sections/Contact.astro";
 ---
 
 <Layout>
-	<Nav />
-	<main>
-		<Hero />
-		<Marquee />
-		<Career />
-		<Skills />
-		<FeaturedWork id="work" kind="web-app" eyebrow="featured · web & app" title="Web & App" />
-		<DesignShowcase id="design" />
-		<Experience />
-		<Education />
-		<Contact />
-	</main>
+  <Nav />
+  <main>
+    <Hero />
+    <Marquee />
+    <Career />
+    <Skills />
+    <FeaturedWork
+      id="work"
+      kind="web-app"
+      eyebrow="featured · web & app"
+      title="Web & App"
+    />
+    <DesignShowcase id="design" />
+    <Education />
+    <Activity />
+    <Contact />
+  </main>
 </Layout>
